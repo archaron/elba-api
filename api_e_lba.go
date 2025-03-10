@@ -19,15 +19,14 @@ import (
 	"net/url"
 )
 
-
-// ELbaAPIService ELbaAPI service
-type ELbaAPIService service
+// ElbaAPIService ElbaAPI service
+type ElbaAPIService service
 
 type ApiOrganizationsGetRequest struct {
-	ctx context.Context
-	ApiService *ELbaAPIService
-	offset *int32
-	limit *int32
+	ctx        context.Context
+	ApiService *ElbaAPIService
+	offset     *int32
+	limit      *int32
 }
 
 // Позиция, начиная с которой будут вычитываться организации. По-умолчанию 0
@@ -49,27 +48,28 @@ func (r ApiOrganizationsGetRequest) Execute() (*GetOrganizationsResponse, *http.
 /*
 OrganizationsGet Получение списка доступных организаций
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiOrganizationsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiOrganizationsGetRequest
 */
-func (a *ELbaAPIService) OrganizationsGet(ctx context.Context) ApiOrganizationsGetRequest {
+func (a *ElbaAPIService) OrganizationsGet(ctx context.Context) ApiOrganizationsGetRequest {
 	return ApiOrganizationsGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return GetOrganizationsResponse
-func (a *ELbaAPIService) OrganizationsGetExecute(r ApiOrganizationsGetRequest) (*GetOrganizationsResponse, *http.Response, error) {
+//
+//	@return GetOrganizationsResponse
+func (a *ElbaAPIService) OrganizationsGetExecute(r ApiOrganizationsGetRequest) (*GetOrganizationsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GetOrganizationsResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GetOrganizationsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ELbaAPIService.OrganizationsGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -146,8 +146,8 @@ func (a *ELbaAPIService) OrganizationsGetExecute(r ApiOrganizationsGetRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -157,8 +157,8 @@ func (a *ELbaAPIService) OrganizationsGetExecute(r ApiOrganizationsGetRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -168,8 +168,8 @@ func (a *ELbaAPIService) OrganizationsGetExecute(r ApiOrganizationsGetRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -179,8 +179,8 @@ func (a *ELbaAPIService) OrganizationsGetExecute(r ApiOrganizationsGetRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

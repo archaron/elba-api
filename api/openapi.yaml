@@ -79,7 +79,7 @@ paths:
           description: Внутренняя ошибка сервиса
       summary: Получение списка доступных организаций
       tags:
-      - ELba
+      - Elba
   /organizations/{organizationId}/bank-accounts:
     get:
       parameters:

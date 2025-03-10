@@ -88,7 +88,7 @@ All URIs are relative to *https://elba-api.kontur.ru/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*ELbaAPI* | [**OrganizationsGet**](docs/ELbaAPI.md#organizationsget) | **Get** /organizations | Получение списка доступных организаций
+*ElbaAPI* | [**OrganizationsGet**](docs/ElbaAPI.md#organizationsget) | **Get** /organizations | Получение списка доступных организаций
 *ElbaAPI* | [**LongRunningTasksTaskIdGet**](docs/ElbaAPI.md#longrunningtaskstaskidget) | **Get** /long-running-tasks/{taskId} | Получить состояние операции
 *ElbaAPI* | [**OrganizationsOrganizationIdActsPost**](docs/ElbaAPI.md#organizationsorganizationidactspost) | **Post** /organizations/{organizationId}/acts | Создание исходящего акта
 *ElbaAPI* | [**OrganizationsOrganizationIdBankAccountsGet**](docs/ElbaAPI.md#organizationsorganizationidbankaccountsget) | **Get** /organizations/{organizationId}/bank-accounts | Получение списка банковских счетов
