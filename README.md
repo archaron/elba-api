@@ -32,7 +32,7 @@ go get golang.org/x/net/context
 Put the package under your project folder and add the following in import:
 
 ```go
-import elba "github.com/GIT_USER_ID/GIT_REPO_ID"
+import elba "github.com/archaron/elba-api"
 ```
 
 To use a proxy, set the environment variable `HTTP_PROXY`:
@@ -220,6 +220,6 @@ Each of these functions takes a value of the given basic type and returns a poin
 * `PtrTime`
 
 ## Author
-
+tsm@archaron.ru
 e@kontur.ru
 

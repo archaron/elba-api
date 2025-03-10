@@ -11,10 +11,10 @@ package elba
 
 import (
 	"context"
+	openapiclient "github.com/archaron/elba-api"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_elba_ElbaAPIService(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService LongRunningTasksTaskIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var taskId string
 
@@ -38,7 +38,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdActsPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -52,7 +52,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdBankAccountsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -66,7 +66,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdBankAccountsPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -80,7 +80,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdBillsBillIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 		var billId string
@@ -95,7 +95,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdBillsPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -109,7 +109,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdContractorsContractorIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 		var contractorId string
@@ -124,7 +124,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdContractorsPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -138,7 +138,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdContractorsSearchPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -152,7 +152,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdDeliveryNotesPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -166,7 +166,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdDocumentNewsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -180,7 +180,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdDocumentNewsSubscriptionPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -193,7 +193,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdProductsPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -207,7 +207,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdProductsProductIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 		var productId string
@@ -222,7 +222,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdProductsProductIdUpdatePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 		var productId string
@@ -237,7 +237,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdProductsSearchPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 
@@ -251,7 +251,7 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 
 	t.Run("Test ElbaAPIService OrganizationsOrganizationIdUniversalTransferDocumentsPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var organizationId string
 

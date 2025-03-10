@@ -11,10 +11,10 @@ package elba
 
 import (
 	"context"
+	openapiclient "github.com/archaron/e
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_elba_ELbaAPIService(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_elba_ELbaAPIService(t *testing.T) {
 
 	t.Run("Test ELbaAPIService OrganizationsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.ELbaAPI.OrganizationsGet(context.Background()).Execute()
 
