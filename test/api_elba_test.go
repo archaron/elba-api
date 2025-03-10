@@ -11,7 +11,7 @@ package elba
 
 import (
 	"context"
-	openapiclient "github.com/archaron/elba-api"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -29,6 +29,18 @@ func Test_elba_ElbaAPIService(t *testing.T) {
 		var taskId string
 
 		resp, httpRes, err := apiClient.ElbaAPI.LongRunningTasksTaskIdGet(context.Background(), taskId).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test ElbaAPIService OrganizationsGet", func(t *testing.T) {
+
+		t.Skip("skip test") // remove to run test
+
+		resp, httpRes, err := apiClient.ElbaAPI.OrganizationsGet(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

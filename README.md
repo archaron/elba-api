@@ -32,7 +32,7 @@ go get golang.org/x/net/context
 Put the package under your project folder and add the following in import:
 
 ```go
-import elba "github.com/archaron/elba-api"
+import elba "github.com/GIT_USER_ID/GIT_REPO_ID"
 ```
 
 To use a proxy, set the environment variable `HTTP_PROXY`:
@@ -88,8 +88,8 @@ All URIs are relative to *https://elba-api.kontur.ru/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*ElbaAPI* | [**OrganizationsGet**](docs/ElbaAPI.md#organizationsget) | **Get** /organizations | Получение списка доступных организаций
 *ElbaAPI* | [**LongRunningTasksTaskIdGet**](docs/ElbaAPI.md#longrunningtaskstaskidget) | **Get** /long-running-tasks/{taskId} | Получить состояние операции
+*ElbaAPI* | [**OrganizationsGet**](docs/ElbaAPI.md#organizationsget) | **Get** /organizations | Получение списка доступных организаций
 *ElbaAPI* | [**OrganizationsOrganizationIdActsPost**](docs/ElbaAPI.md#organizationsorganizationidactspost) | **Post** /organizations/{organizationId}/acts | Создание исходящего акта
 *ElbaAPI* | [**OrganizationsOrganizationIdBankAccountsGet**](docs/ElbaAPI.md#organizationsorganizationidbankaccountsget) | **Get** /organizations/{organizationId}/bank-accounts | Получение списка банковских счетов
 *ElbaAPI* | [**OrganizationsOrganizationIdBankAccountsPost**](docs/ElbaAPI.md#organizationsorganizationidbankaccountspost) | **Post** /organizations/{organizationId}/bank-accounts | Создание банковского счёта
@@ -220,6 +220,6 @@ Each of these functions takes a value of the given basic type and returns a poin
 * `PtrTime`
 
 ## Author
-tsm@archaron.ru
+
 e@kontur.ru
 

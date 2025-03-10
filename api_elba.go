@@ -20,14 +20,13 @@ import (
 	"strings"
 )
 
-
 // ElbaAPIService ElbaAPI service
 type ElbaAPIService service
 
 type ApiLongRunningTasksTaskIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ElbaAPIService
-	taskId string
+	taskId     string
 }
 
 func (r ApiLongRunningTasksTaskIdGetRequest) Execute() (*LongRunningTaskState, *http.Response, error) {
@@ -37,26 +36,27 @@ func (r ApiLongRunningTasksTaskIdGetRequest) Execute() (*LongRunningTaskState, *
 /*
 LongRunningTasksTaskIdGet Получить состояние операции
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskId Идентификатор длительной операции
- @return ApiLongRunningTasksTaskIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskId Идентификатор длительной операции
+	@return ApiLongRunningTasksTaskIdGetRequest
 */
 func (a *ElbaAPIService) LongRunningTasksTaskIdGet(ctx context.Context, taskId string) ApiLongRunningTasksTaskIdGetRequest {
 	return ApiLongRunningTasksTaskIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskId: taskId,
+		ctx:        ctx,
+		taskId:     taskId,
 	}
 }
 
 // Execute executes the request
-//  @return LongRunningTaskState
+//
+//	@return LongRunningTaskState
 func (a *ElbaAPIService) LongRunningTasksTaskIdGetExecute(r ApiLongRunningTasksTaskIdGetRequest) (*LongRunningTaskState, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *LongRunningTaskState
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *LongRunningTaskState
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.LongRunningTasksTaskIdGet")
@@ -131,8 +131,8 @@ func (a *ElbaAPIService) LongRunningTasksTaskIdGetExecute(r ApiLongRunningTasksT
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -142,8 +142,8 @@ func (a *ElbaAPIService) LongRunningTasksTaskIdGetExecute(r ApiLongRunningTasksT
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -153,8 +153,8 @@ func (a *ElbaAPIService) LongRunningTasksTaskIdGetExecute(r ApiLongRunningTasksT
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -164,8 +164,8 @@ func (a *ElbaAPIService) LongRunningTasksTaskIdGetExecute(r ApiLongRunningTasksT
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -175,8 +175,183 @@ func (a *ElbaAPIService) LongRunningTasksTaskIdGetExecute(r ApiLongRunningTasksT
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiOrganizationsGetRequest struct {
+	ctx        context.Context
+	ApiService *ElbaAPIService
+	offset     *int32
+	limit      *int32
+}
+
+// Позиция, начиная с которой будут вычитываться организации. По-умолчанию 0
+func (r ApiOrganizationsGetRequest) Offset(offset int32) ApiOrganizationsGetRequest {
+	r.offset = &offset
+	return r
+}
+
+// Максимальное количество организаций для получения. По-умолчанию 100
+func (r ApiOrganizationsGetRequest) Limit(limit int32) ApiOrganizationsGetRequest {
+	r.limit = &limit
+	return r
+}
+
+func (r ApiOrganizationsGetRequest) Execute() (*GetOrganizationsResponse, *http.Response, error) {
+	return r.ApiService.OrganizationsGetExecute(r)
+}
+
+/*
+OrganizationsGet Получение списка доступных организаций
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiOrganizationsGetRequest
+*/
+func (a *ElbaAPIService) OrganizationsGet(ctx context.Context) ApiOrganizationsGetRequest {
+	return ApiOrganizationsGetRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+// Execute executes the request
+//
+//	@return GetOrganizationsResponse
+func (a *ElbaAPIService) OrganizationsGetExecute(r ApiOrganizationsGetRequest) (*GetOrganizationsResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GetOrganizationsResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsGet")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/organizations"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.offset != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "offset", r.offset, "")
+	}
+	if r.limit != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["ApiKeyAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["X-Kontur-ApiKey"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 402 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -194,9 +369,9 @@ func (a *ElbaAPIService) LongRunningTasksTaskIdGetExecute(r ApiLongRunningTasksT
 }
 
 type ApiOrganizationsOrganizationIdActsPostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
-	organizationId string
+	ctx              context.Context
+	ApiService       *ElbaAPIService
+	organizationId   string
 	createActRequest *CreateActRequest
 }
 
@@ -213,26 +388,27 @@ func (r ApiOrganizationsOrganizationIdActsPostRequest) Execute() (*CreateActResp
 /*
 OrganizationsOrganizationIdActsPost Создание исходящего акта
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdActsPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdActsPostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdActsPost(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdActsPostRequest {
 	return ApiOrganizationsOrganizationIdActsPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return CreateActResponse
+//
+//	@return CreateActResponse
 func (a *ElbaAPIService) OrganizationsOrganizationIdActsPostExecute(r ApiOrganizationsOrganizationIdActsPostRequest) (*CreateActResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *CreateActResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *CreateActResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdActsPost")
@@ -312,8 +488,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdActsPostExecute(r ApiOrganiz
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -323,8 +499,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdActsPostExecute(r ApiOrganiz
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -334,8 +510,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdActsPostExecute(r ApiOrganiz
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -345,8 +521,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdActsPostExecute(r ApiOrganiz
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -356,8 +532,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdActsPostExecute(r ApiOrganiz
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -375,11 +551,11 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdActsPostExecute(r ApiOrganiz
 }
 
 type ApiOrganizationsOrganizationIdBankAccountsGetRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
+	ctx            context.Context
+	ApiService     *ElbaAPIService
 	organizationId string
-	offset *int32
-	limit *int32
+	offset         *int32
+	limit          *int32
 }
 
 // Позиция, начиная с которой будут вычитываться счета. По-умолчанию 0
@@ -401,26 +577,27 @@ func (r ApiOrganizationsOrganizationIdBankAccountsGetRequest) Execute() (*GetBan
 /*
 OrganizationsOrganizationIdBankAccountsGet Получение списка банковских счетов
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId 
- @return ApiOrganizationsOrganizationIdBankAccountsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId
+	@return ApiOrganizationsOrganizationIdBankAccountsGetRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsGet(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdBankAccountsGetRequest {
 	return ApiOrganizationsOrganizationIdBankAccountsGetRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return GetBankAccountsResponse
+//
+//	@return GetBankAccountsResponse
 func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsGetExecute(r ApiOrganizationsOrganizationIdBankAccountsGetRequest) (*GetBankAccountsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GetBankAccountsResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GetBankAccountsResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdBankAccountsGet")
@@ -501,8 +678,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsGetExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -512,8 +689,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsGetExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -523,8 +700,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsGetExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -534,8 +711,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsGetExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -553,9 +730,9 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsGetExecute(r Api
 }
 
 type ApiOrganizationsOrganizationIdBankAccountsPostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
-	organizationId string
+	ctx                      context.Context
+	ApiService               *ElbaAPIService
+	organizationId           string
 	createBankAccountRequest *CreateBankAccountRequest
 }
 
@@ -572,26 +749,27 @@ func (r ApiOrganizationsOrganizationIdBankAccountsPostRequest) Execute() (*Creat
 /*
 OrganizationsOrganizationIdBankAccountsPost Создание банковского счёта
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdBankAccountsPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdBankAccountsPostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsPost(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdBankAccountsPostRequest {
 	return ApiOrganizationsOrganizationIdBankAccountsPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return CreateBankAccountResponse
+//
+//	@return CreateBankAccountResponse
 func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsPostExecute(r ApiOrganizationsOrganizationIdBankAccountsPostRequest) (*CreateBankAccountResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *CreateBankAccountResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *CreateBankAccountResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdBankAccountsPost")
@@ -671,8 +849,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsPostExecute(r Ap
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -682,8 +860,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsPostExecute(r Ap
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -693,8 +871,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsPostExecute(r Ap
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -704,8 +882,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsPostExecute(r Ap
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 409 {
@@ -715,8 +893,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsPostExecute(r Ap
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -726,8 +904,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsPostExecute(r Ap
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -745,10 +923,10 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBankAccountsPostExecute(r Ap
 }
 
 type ApiOrganizationsOrganizationIdBillsBillIdGetRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
+	ctx            context.Context
+	ApiService     *ElbaAPIService
 	organizationId string
-	billId string
+	billId         string
 }
 
 func (r ApiOrganizationsOrganizationIdBillsBillIdGetRequest) Execute() (*Bill, *http.Response, error) {
@@ -758,28 +936,29 @@ func (r ApiOrganizationsOrganizationIdBillsBillIdGetRequest) Execute() (*Bill, *
 /*
 OrganizationsOrganizationIdBillsBillIdGet Получение исходящего счёта
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @param billId Идентификатор счёта
- @return ApiOrganizationsOrganizationIdBillsBillIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@param billId Идентификатор счёта
+	@return ApiOrganizationsOrganizationIdBillsBillIdGetRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdBillsBillIdGet(ctx context.Context, organizationId string, billId string) ApiOrganizationsOrganizationIdBillsBillIdGetRequest {
 	return ApiOrganizationsOrganizationIdBillsBillIdGetRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
-		billId: billId,
+		billId:         billId,
 	}
 }
 
 // Execute executes the request
-//  @return Bill
+//
+//	@return Bill
 func (a *ElbaAPIService) OrganizationsOrganizationIdBillsBillIdGetExecute(r ApiOrganizationsOrganizationIdBillsBillIdGetRequest) (*Bill, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Bill
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Bill
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdBillsBillIdGet")
@@ -855,8 +1034,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsBillIdGetExecute(r ApiO
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -866,8 +1045,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsBillIdGetExecute(r ApiO
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -877,8 +1056,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsBillIdGetExecute(r ApiO
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -888,8 +1067,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsBillIdGetExecute(r ApiO
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -899,8 +1078,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsBillIdGetExecute(r ApiO
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -918,9 +1097,9 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsBillIdGetExecute(r ApiO
 }
 
 type ApiOrganizationsOrganizationIdBillsPostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
-	organizationId string
+	ctx               context.Context
+	ApiService        *ElbaAPIService
+	organizationId    string
 	createBillRequest *CreateBillRequest
 }
 
@@ -937,26 +1116,27 @@ func (r ApiOrganizationsOrganizationIdBillsPostRequest) Execute() (*CreateBillRe
 /*
 OrganizationsOrganizationIdBillsPost Создание исходящего счёта
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdBillsPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdBillsPostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdBillsPost(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdBillsPostRequest {
 	return ApiOrganizationsOrganizationIdBillsPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return CreateBillResponse
+//
+//	@return CreateBillResponse
 func (a *ElbaAPIService) OrganizationsOrganizationIdBillsPostExecute(r ApiOrganizationsOrganizationIdBillsPostRequest) (*CreateBillResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *CreateBillResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *CreateBillResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdBillsPost")
@@ -1036,8 +1216,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsPostExecute(r ApiOrgani
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -1047,8 +1227,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsPostExecute(r ApiOrgani
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -1058,8 +1238,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsPostExecute(r ApiOrgani
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1069,8 +1249,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsPostExecute(r ApiOrgani
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1080,8 +1260,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsPostExecute(r ApiOrgani
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1099,10 +1279,10 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdBillsPostExecute(r ApiOrgani
 }
 
 type ApiOrganizationsOrganizationIdContractorsContractorIdGetRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
+	ctx            context.Context
+	ApiService     *ElbaAPIService
 	organizationId string
-	contractorId string
+	contractorId   string
 }
 
 func (r ApiOrganizationsOrganizationIdContractorsContractorIdGetRequest) Execute() (*Contractor, *http.Response, error) {
@@ -1112,28 +1292,29 @@ func (r ApiOrganizationsOrganizationIdContractorsContractorIdGetRequest) Execute
 /*
 OrganizationsOrganizationIdContractorsContractorIdGet Получение контрагента
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @param contractorId Идентификатор контагента
- @return ApiOrganizationsOrganizationIdContractorsContractorIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@param contractorId Идентификатор контагента
+	@return ApiOrganizationsOrganizationIdContractorsContractorIdGetRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsContractorIdGet(ctx context.Context, organizationId string, contractorId string) ApiOrganizationsOrganizationIdContractorsContractorIdGetRequest {
 	return ApiOrganizationsOrganizationIdContractorsContractorIdGetRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
-		contractorId: contractorId,
+		contractorId:   contractorId,
 	}
 }
 
 // Execute executes the request
-//  @return Contractor
+//
+//	@return Contractor
 func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsContractorIdGetExecute(r ApiOrganizationsOrganizationIdContractorsContractorIdGetRequest) (*Contractor, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Contractor
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Contractor
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdContractorsContractorIdGet")
@@ -1209,8 +1390,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsContractorIdGetEx
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -1220,8 +1401,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsContractorIdGetEx
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1231,8 +1412,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsContractorIdGetEx
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1242,8 +1423,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsContractorIdGetEx
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1253,8 +1434,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsContractorIdGetEx
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1272,9 +1453,9 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsContractorIdGetEx
 }
 
 type ApiOrganizationsOrganizationIdContractorsPostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
-	organizationId string
+	ctx                     context.Context
+	ApiService              *ElbaAPIService
+	organizationId          string
 	createContractorRequest *CreateContractorRequest
 }
 
@@ -1291,26 +1472,27 @@ func (r ApiOrganizationsOrganizationIdContractorsPostRequest) Execute() (*Create
 /*
 OrganizationsOrganizationIdContractorsPost Создание контрагента
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdContractorsPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdContractorsPostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsPost(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdContractorsPostRequest {
 	return ApiOrganizationsOrganizationIdContractorsPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return CreateContractorResponse
+//
+//	@return CreateContractorResponse
 func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsPostExecute(r ApiOrganizationsOrganizationIdContractorsPostRequest) (*CreateContractorResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *CreateContractorResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *CreateContractorResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdContractorsPost")
@@ -1390,8 +1572,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsPostExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -1401,8 +1583,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsPostExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -1412,8 +1594,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsPostExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1423,8 +1605,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsPostExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 409 {
@@ -1434,8 +1616,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsPostExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1445,8 +1627,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsPostExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1464,9 +1646,9 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsPostExecute(r Api
 }
 
 type ApiOrganizationsOrganizationIdContractorsSearchPostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
-	organizationId string
+	ctx                      context.Context
+	ApiService               *ElbaAPIService
+	organizationId           string
 	searchContractorsRequest *SearchContractorsRequest
 }
 
@@ -1483,26 +1665,27 @@ func (r ApiOrganizationsOrganizationIdContractorsSearchPostRequest) Execute() (*
 /*
 OrganizationsOrganizationIdContractorsSearchPost Поиск контрагентов
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdContractorsSearchPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdContractorsSearchPostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsSearchPost(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdContractorsSearchPostRequest {
 	return ApiOrganizationsOrganizationIdContractorsSearchPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return SearchContractorsTaskResult
+//
+//	@return SearchContractorsTaskResult
 func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsSearchPostExecute(r ApiOrganizationsOrganizationIdContractorsSearchPostRequest) (*SearchContractorsTaskResult, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *SearchContractorsTaskResult
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *SearchContractorsTaskResult
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdContractorsSearchPost")
@@ -1582,8 +1765,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsSearchPostExecute
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -1593,8 +1776,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsSearchPostExecute
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -1604,8 +1787,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsSearchPostExecute
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1615,8 +1798,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsSearchPostExecute
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1626,8 +1809,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsSearchPostExecute
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1645,9 +1828,9 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdContractorsSearchPostExecute
 }
 
 type ApiOrganizationsOrganizationIdDeliveryNotesPostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
-	organizationId string
+	ctx                       context.Context
+	ApiService                *ElbaAPIService
+	organizationId            string
 	createDeliveryNoteRequest *CreateDeliveryNoteRequest
 }
 
@@ -1664,26 +1847,27 @@ func (r ApiOrganizationsOrganizationIdDeliveryNotesPostRequest) Execute() (*Crea
 /*
 OrganizationsOrganizationIdDeliveryNotesPost Создание исходящей накладной
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdDeliveryNotesPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdDeliveryNotesPostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdDeliveryNotesPost(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdDeliveryNotesPostRequest {
 	return ApiOrganizationsOrganizationIdDeliveryNotesPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return CreateDeliveryNoteResponse
+//
+//	@return CreateDeliveryNoteResponse
 func (a *ElbaAPIService) OrganizationsOrganizationIdDeliveryNotesPostExecute(r ApiOrganizationsOrganizationIdDeliveryNotesPostRequest) (*CreateDeliveryNoteResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *CreateDeliveryNoteResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *CreateDeliveryNoteResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdDeliveryNotesPost")
@@ -1763,8 +1947,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDeliveryNotesPostExecute(r A
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -1774,8 +1958,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDeliveryNotesPostExecute(r A
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -1785,8 +1969,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDeliveryNotesPostExecute(r A
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1796,8 +1980,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDeliveryNotesPostExecute(r A
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1807,8 +1991,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDeliveryNotesPostExecute(r A
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1826,11 +2010,11 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDeliveryNotesPostExecute(r A
 }
 
 type ApiOrganizationsOrganizationIdDocumentNewsGetRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
+	ctx            context.Context
+	ApiService     *ElbaAPIService
 	organizationId string
-	offset *int64
-	limit *int32
+	offset         *int64
+	limit          *int32
 }
 
 // Позиция, начиная с которой будут вычитываться новости
@@ -1852,26 +2036,27 @@ func (r ApiOrganizationsOrganizationIdDocumentNewsGetRequest) Execute() (*GetDoc
 /*
 OrganizationsOrganizationIdDocumentNewsGet Получение списка новостей по документам
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdDocumentNewsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdDocumentNewsGetRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsGet(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdDocumentNewsGetRequest {
 	return ApiOrganizationsOrganizationIdDocumentNewsGetRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return GetDocumentNewsResponse
+//
+//	@return GetDocumentNewsResponse
 func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsGetExecute(r ApiOrganizationsOrganizationIdDocumentNewsGetRequest) (*GetDocumentNewsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GetDocumentNewsResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GetDocumentNewsResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdDocumentNewsGet")
@@ -1956,8 +2141,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsGetExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -1967,8 +2152,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsGetExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1978,8 +2163,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsGetExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1989,8 +2174,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsGetExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2008,8 +2193,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsGetExecute(r Api
 }
 
 type ApiOrganizationsOrganizationIdDocumentNewsSubscriptionPostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
+	ctx            context.Context
+	ApiService     *ElbaAPIService
 	organizationId string
 }
 
@@ -2020,14 +2205,14 @@ func (r ApiOrganizationsOrganizationIdDocumentNewsSubscriptionPostRequest) Execu
 /*
 OrganizationsOrganizationIdDocumentNewsSubscriptionPost Подписаться на новости по документам
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdDocumentNewsSubscriptionPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdDocumentNewsSubscriptionPostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsSubscriptionPost(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdDocumentNewsSubscriptionPostRequest {
 	return ApiOrganizationsOrganizationIdDocumentNewsSubscriptionPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
@@ -2035,9 +2220,9 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsSubscriptionPost
 // Execute executes the request
 func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsSubscriptionPostExecute(r ApiOrganizationsOrganizationIdDocumentNewsSubscriptionPostRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdDocumentNewsSubscriptionPost")
@@ -2112,8 +2297,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsSubscriptionPost
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -2123,8 +2308,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsSubscriptionPost
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -2134,8 +2319,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsSubscriptionPost
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2145,8 +2330,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsSubscriptionPost
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -2155,9 +2340,9 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdDocumentNewsSubscriptionPost
 }
 
 type ApiOrganizationsOrganizationIdProductsPostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
-	organizationId string
+	ctx                  context.Context
+	ApiService           *ElbaAPIService
+	organizationId       string
 	createProductRequest *CreateProductRequest
 }
 
@@ -2174,26 +2359,27 @@ func (r ApiOrganizationsOrganizationIdProductsPostRequest) Execute() (*CreatePro
 /*
 OrganizationsOrganizationIdProductsPost Создание товара
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdProductsPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdProductsPostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdProductsPost(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdProductsPostRequest {
 	return ApiOrganizationsOrganizationIdProductsPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return CreateProductResponse
+//
+//	@return CreateProductResponse
 func (a *ElbaAPIService) OrganizationsOrganizationIdProductsPostExecute(r ApiOrganizationsOrganizationIdProductsPostRequest) (*CreateProductResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *CreateProductResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *CreateProductResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdProductsPost")
@@ -2273,8 +2459,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsPostExecute(r ApiOrg
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -2284,8 +2470,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsPostExecute(r ApiOrg
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -2295,8 +2481,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsPostExecute(r ApiOrg
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -2306,8 +2492,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsPostExecute(r ApiOrg
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 409 {
@@ -2317,8 +2503,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsPostExecute(r ApiOrg
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2328,8 +2514,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsPostExecute(r ApiOrg
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2347,10 +2533,10 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsPostExecute(r ApiOrg
 }
 
 type ApiOrganizationsOrganizationIdProductsProductIdGetRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
+	ctx            context.Context
+	ApiService     *ElbaAPIService
 	organizationId string
-	productId string
+	productId      string
 }
 
 func (r ApiOrganizationsOrganizationIdProductsProductIdGetRequest) Execute() (*Product, *http.Response, error) {
@@ -2360,28 +2546,29 @@ func (r ApiOrganizationsOrganizationIdProductsProductIdGetRequest) Execute() (*P
 /*
 OrganizationsOrganizationIdProductsProductIdGet Получение товара
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @param productId Идентификатор товара
- @return ApiOrganizationsOrganizationIdProductsProductIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@param productId Идентификатор товара
+	@return ApiOrganizationsOrganizationIdProductsProductIdGetRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdGet(ctx context.Context, organizationId string, productId string) ApiOrganizationsOrganizationIdProductsProductIdGetRequest {
 	return ApiOrganizationsOrganizationIdProductsProductIdGetRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
-		productId: productId,
+		productId:      productId,
 	}
 }
 
 // Execute executes the request
-//  @return Product
+//
+//	@return Product
 func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdGetExecute(r ApiOrganizationsOrganizationIdProductsProductIdGetRequest) (*Product, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Product
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Product
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdProductsProductIdGet")
@@ -2457,8 +2644,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdGetExecute(
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -2468,8 +2655,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdGetExecute(
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -2479,8 +2666,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdGetExecute(
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2490,8 +2677,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdGetExecute(
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2501,8 +2688,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdGetExecute(
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2520,10 +2707,10 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdGetExecute(
 }
 
 type ApiOrganizationsOrganizationIdProductsProductIdUpdatePostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
-	organizationId string
-	productId string
+	ctx                  context.Context
+	ApiService           *ElbaAPIService
+	organizationId       string
+	productId            string
 	updateProductRequest *UpdateProductRequest
 }
 
@@ -2540,28 +2727,29 @@ func (r ApiOrganizationsOrganizationIdProductsProductIdUpdatePostRequest) Execut
 /*
 OrganizationsOrganizationIdProductsProductIdUpdatePost Обновление товара
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @param productId Индентификатор товара
- @return ApiOrganizationsOrganizationIdProductsProductIdUpdatePostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@param productId Индентификатор товара
+	@return ApiOrganizationsOrganizationIdProductsProductIdUpdatePostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdUpdatePost(ctx context.Context, organizationId string, productId string) ApiOrganizationsOrganizationIdProductsProductIdUpdatePostRequest {
 	return ApiOrganizationsOrganizationIdProductsProductIdUpdatePostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
-		productId: productId,
+		productId:      productId,
 	}
 }
 
 // Execute executes the request
-//  @return AcceptedLongRunningTask
+//
+//	@return AcceptedLongRunningTask
 func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdUpdatePostExecute(r ApiOrganizationsOrganizationIdProductsProductIdUpdatePostRequest) (*AcceptedLongRunningTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AcceptedLongRunningTask
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AcceptedLongRunningTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdProductsProductIdUpdatePost")
@@ -2642,8 +2830,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdUpdatePostE
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -2653,8 +2841,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdUpdatePostE
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -2664,8 +2852,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdUpdatePostE
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -2675,8 +2863,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdUpdatePostE
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2686,8 +2874,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdUpdatePostE
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 409 {
@@ -2697,8 +2885,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdUpdatePostE
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2708,8 +2896,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdUpdatePostE
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2727,9 +2915,9 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsProductIdUpdatePostE
 }
 
 type ApiOrganizationsOrganizationIdProductsSearchPostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
-	organizationId string
+	ctx                   context.Context
+	ApiService            *ElbaAPIService
+	organizationId        string
 	searchProductsRequest *SearchProductsRequest
 }
 
@@ -2746,26 +2934,27 @@ func (r ApiOrganizationsOrganizationIdProductsSearchPostRequest) Execute() (*Sea
 /*
 OrganizationsOrganizationIdProductsSearchPost Поиск товаров
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdProductsSearchPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdProductsSearchPostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdProductsSearchPost(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdProductsSearchPostRequest {
 	return ApiOrganizationsOrganizationIdProductsSearchPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return SearchProductsTaskResult
+//
+//	@return SearchProductsTaskResult
 func (a *ElbaAPIService) OrganizationsOrganizationIdProductsSearchPostExecute(r ApiOrganizationsOrganizationIdProductsSearchPostRequest) (*SearchProductsTaskResult, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *SearchProductsTaskResult
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *SearchProductsTaskResult
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdProductsSearchPost")
@@ -2845,8 +3034,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsSearchPostExecute(r 
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -2856,8 +3045,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsSearchPostExecute(r 
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -2867,8 +3056,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsSearchPostExecute(r 
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -2878,8 +3067,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsSearchPostExecute(r 
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2889,8 +3078,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsSearchPostExecute(r 
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2908,9 +3097,9 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdProductsSearchPostExecute(r 
 }
 
 type ApiOrganizationsOrganizationIdUniversalTransferDocumentsPostRequest struct {
-	ctx context.Context
-	ApiService *ElbaAPIService
-	organizationId string
+	ctx                                    context.Context
+	ApiService                             *ElbaAPIService
+	organizationId                         string
 	createUniversalTransferDocumentRequest *CreateUniversalTransferDocumentRequest
 }
 
@@ -2927,26 +3116,27 @@ func (r ApiOrganizationsOrganizationIdUniversalTransferDocumentsPostRequest) Exe
 /*
 OrganizationsOrganizationIdUniversalTransferDocumentsPost Создание исходящего универсального передаточного документа
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param organizationId Идентификатор организации
- @return ApiOrganizationsOrganizationIdUniversalTransferDocumentsPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param organizationId Идентификатор организации
+	@return ApiOrganizationsOrganizationIdUniversalTransferDocumentsPostRequest
 */
 func (a *ElbaAPIService) OrganizationsOrganizationIdUniversalTransferDocumentsPost(ctx context.Context, organizationId string) ApiOrganizationsOrganizationIdUniversalTransferDocumentsPostRequest {
 	return ApiOrganizationsOrganizationIdUniversalTransferDocumentsPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		organizationId: organizationId,
 	}
 }
 
 // Execute executes the request
-//  @return CreateUniversalTransferDocumentResponse
+//
+//	@return CreateUniversalTransferDocumentResponse
 func (a *ElbaAPIService) OrganizationsOrganizationIdUniversalTransferDocumentsPostExecute(r ApiOrganizationsOrganizationIdUniversalTransferDocumentsPostRequest) (*CreateUniversalTransferDocumentResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *CreateUniversalTransferDocumentResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *CreateUniversalTransferDocumentResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ElbaAPIService.OrganizationsOrganizationIdUniversalTransferDocumentsPost")
@@ -3026,8 +3216,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdUniversalTransferDocumentsPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -3037,8 +3227,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdUniversalTransferDocumentsPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 402 {
@@ -3048,8 +3238,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdUniversalTransferDocumentsPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -3059,8 +3249,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdUniversalTransferDocumentsPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -3070,8 +3260,8 @@ func (a *ElbaAPIService) OrganizationsOrganizationIdUniversalTransferDocumentsPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

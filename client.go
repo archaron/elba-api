@@ -50,8 +50,6 @@ type APIClient struct {
 	// API Services
 
 	ElbaAPI *ElbaAPIService
-
-	ElbaAPI *ElbaAPIService
 }
 
 type service struct {
@@ -70,7 +68,6 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.common.client = c
 
 	// API Services
-	c.ElbaAPI = (*ElbaAPIService)(&c.common)
 	c.ElbaAPI = (*ElbaAPIService)(&c.common)
 
 	return c

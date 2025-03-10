@@ -3,7 +3,6 @@
 .travis.yml
 README.md
 api/openapi.yaml
-api_e_lba.go
 api_elba.go
 client.go
 configuration.go
@@ -37,7 +36,6 @@ docs/CreateUniversalTransferDocumentResponse.md
 docs/DeliveryNoteItemToCreate.md
 docs/DocumentNews.md
 docs/DocumentNewsNewsContent.md
-docs/ElbaAPI.md
 docs/ElbaAPI.md
 docs/Error.md
 docs/ErrorResponse.md
@@ -143,6 +141,5 @@ model_update_product_error.go
 model_update_product_request.go
 model_update_product_task_result.go
 response.go
-test/api_e_lba_test.go
 test/api_elba_test.go
 utils.go
