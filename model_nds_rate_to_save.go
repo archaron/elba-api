@@ -20,13 +20,13 @@ import (
 type NDSRateToSave string
 
 // List of NDSRateToSave
-const (
-	WithoutNds NDSRateToSave = "withoutNds"
-	Nds0 NDSRateToSave = "nds0"
-	Nds5 NDSRateToSave = "nds5"
-	Nds10 NDSRateToSave = "nds10"
-	Nds20 NDSRateToSave = "nds20"
-)
+// const (
+// 	WithoutNds NDSRateToSave = "withoutNds"
+// 	Nds0 NDSRateToSave = "nds0"
+// 	Nds5 NDSRateToSave = "nds5"
+// 	Nds10 NDSRateToSave = "nds10"
+// 	Nds20 NDSRateToSave = "nds20"
+// )
 
 // All allowed values of NDSRateToSave enum
 var AllowedNDSRateToSaveEnumValues = []NDSRateToSave{
@@ -115,4 +115,3 @@ func (v *NullableNDSRateToSave) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

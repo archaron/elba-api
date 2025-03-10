@@ -21,7 +21,7 @@ type UpdateProductError string
 
 // List of UpdateProductError
 const (
-	ProductWithSameNameExists UpdateProductError = "productWithSameNameExists"
+	UpdatingProductWithSameNameExists      UpdateProductError = "productWithSameNameExists"
 	DeletingProductNameThatUsedInDocuments UpdateProductError = "deletingProductNameThatUsedInDocuments"
 	RenamingProductNameThatUsedInDocuments UpdateProductError = "renamingProductNameThatUsedInDocuments"
 	DeletingProductUnitThatUsedInDocuments UpdateProductError = "deletingProductUnitThatUsedInDocuments"
@@ -115,4 +115,3 @@ func (v *NullableUpdateProductError) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
