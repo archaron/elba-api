@@ -1,0 +1,3912 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: e@kontur.ru
+  description: "\r\n## С чего начать\r\n\r\nДля работы с API нужно выпустить API-к\
+    люч — уникальный токен, позволяющий авторизовывать ваши запросы в API Контур.Э\
+    льбы.\r\n\r\n#### Как получить API-ключ\r\n\r\n1. Откройте Эльбу, в верхнем пр\
+    авом углу нажмите «Настройки и оплата» → «Настройки сервиса».\r\n2. Перейдите\
+    \ на вкладку «API».\r\n2. Нажмите на кнопку «Выпустить ключ». После этого откр\
+    оется окно со сгенерированным API-ключом.\r\n3. В открывшемся окне появится ва\
+    ш API-ключ. Скопируйте и сохраните его в надежном месте, потому что он будет п\
+    оказан только один раз. Это сделано в целях безопасности — мы не храним ключи\
+    \ на своей стороне."
+  title: Elba Public API
+  version: v1
+servers:
+- description: Боевой сервер
+  url: https://elba-api.kontur.ru/v1
+security:
+- ApiKeyAuth: []
+paths:
+  /organizations:
+    get:
+      parameters:
+      - description: "Позиция, начиная с которой будут вычитываться организации. П\
+          о-умолчанию 0"
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
+      - description: Максимальное количество организаций для получения. По-умолчанию
+          100
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrganizationsResponse'
+          description: Список организаций
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Получение списка доступных организаций
+      tags:
+      - ELba
+  /organizations/{organizationId}/bank-accounts:
+    get:
+      parameters:
+      - description: ""
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: "Позиция, начиная с которой будут вычитываться счета. По-умол\
+          чанию 0"
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
+      - description: Максимальное количество счетов для получения. По-умолчанию 100
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankAccountsResponse'
+          description: Список банковских счетов
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Получение списка банковских счетов
+      tags:
+      - Elba
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateBankAccountRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateBankAccountRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateBankAccountRequest'
+        description: Данные банковского счёта
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBankAccountResponse'
+          description: Банковский счёт успешно создан
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Запрос сформирован некорректно и не может быть обработан.<br\
+            \ /><br />\r\n            Возможные причины:<br />\r\n            \"Не\
+            валидный номер счёта\",<br />\r\n            \"Тип счёта не является р\
+            ублевым\",<br />\r\n            \"Номер счёта не соответствует БИК бан\
+            ка\",<br />\r\n            \"Неизвестный БИК банка\""
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Такой банковский счёт уже существует
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Создание банковского счёта
+      tags:
+      - Elba
+  /organizations/{organizationId}/contractors:
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateContractorRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateContractorRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateContractorRequest'
+        description: Данные контрагента
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateContractorResponse'
+          description: Контрагент успешно создан
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Запрос сформирован некорректно и не может быть обработан.<br\
+            \ /><br />\r\n            Возможные причины:<br />\r\n            \"Не\
+            валидный ИНН\",<br />\r\n            \"Невалидный КПП\",<br />\r\n   \
+            \         \"У контрагента ИП не должен быть указан КПП\",<br />\r\n  \
+            \          \"Невалидный ОКПО\",<br />\r\n            \"Невалидный ОГРН\
+            \",<br />\r\n            \"Невалидная почта контакта\",<br />\r\n    \
+            \        \"У контакта должно быть заполнено либо имя, либо телефон, ли\
+            бо почта\""
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Контрагент с такими ИНН-КПП уже существует
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Создание контрагента
+      tags:
+      - Elba
+  /organizations/{organizationId}/contractors/{contractorId}:
+    get:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Идентификатор контагента
+        explode: false
+        in: path
+        name: contractorId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contractor'
+          description: Информация о контрагенте
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Контрагент не найден
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Получение контрагента
+      tags:
+      - Elba
+  /organizations/{organizationId}/contractors/search:
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SearchContractorsRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SearchContractorsRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SearchContractorsRequest'
+        description: Параметры поиска
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchContractorsTaskResult'
+          description: Результаты поиска контрагентов
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptedLongRunningTask'
+          description: Поставлена операция на поиск контрагентов
+          headers:
+            Location:
+              description: Путь проверки статуса операции поиска
+              explode: false
+              schema:
+                description: Путь проверки статуса операции поиска
+                format: ""
+                type: string
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Запрос сформирован некорректно и не может быть обработан.<br\
+            \ /><br />\r\n            Возможные причины:<br />\r\n            \"Не\
+            валидный ИНН\",<br />\r\n            \"Невалидный КПП\",<br />\r\n   \
+            \         \"У контрагента ИП не должен быть указан КПП\",<br />\r\n  \
+            \          \"Должен быть заполнен хотя бы один параметр фильтра\""
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Поиск контрагентов
+      tags:
+      - Elba
+  /organizations/{organizationId}/products:
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateProductRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateProductRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateProductRequest'
+        description: Данные товара
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateProductResponse'
+          description: Товар создан
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptedLongRunningTask'
+          description: Поставлена операция на создание товара
+          headers:
+            Location:
+              description: Путь проверки статуса операции создания товара
+              explode: false
+              schema:
+                description: Путь проверки статуса операции создания товара
+                format: ""
+                type: string
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Запрос сформирован некорректно и не может быть обработан.<br\
+            \ /><br />\r\n            Возможные причины:<br />\r\n            \"У\
+            \ товара должно быть основное название\",<br />\r\n            \"У тов\
+            ара должно быть только одно основное название\",<br />\r\n           \
+            \ \"У товара не должно быть совпадающих имён\",<br />\r\n            \"\
+            У товара должна быть основная единица измерения\",<br />\r\n         \
+            \   \"У товара должна быть только одна основная единица измерения\",<br\
+            \ />\r\n            \"У товара не может быть совпадающих единиц измере\
+            ния\""
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Товар с таким названием уже существует
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Создание товара
+      tags:
+      - Elba
+  /organizations/{organizationId}/products/{productId}/update:
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Индентификатор товара
+        explode: false
+        in: path
+        name: productId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateProductRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateProductRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateProductRequest'
+        description: Данные товара
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptedLongRunningTask'
+          description: Поставлена операция на обновление товара
+        "204":
+          description: Товар обновлён
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Запрос сформирован некорректно и не может быть обработан.<br\
+            \ /><br />\r\n            Возможные причины:<br />\r\n            \"У\
+            \ товара должно быть основное название\",<br />\r\n            \"У тов\
+            ара должно быть только одно основное название\",<br />\r\n           \
+            \ \"У товара не должно быть совпадающих имён\",<br />\r\n            \"\
+            У товара должна быть основная единица измерения\",<br />\r\n         \
+            \   \"У товара должна быть только одна основная единица измерения\",<br\
+            \ />\r\n            \"У товара не может быть совпадающих единиц измере\
+            ния\",<br />\r\n            \"Название товара нельзя удалить, так как\
+            \ оно используется в документах\",<br />\r\n            \"Название тов\
+            ара нельзя изменить, так как оно используется в документах\",<br />\r\n\
+            \            \"Единицу измерения нельзя удалить, так как она используе\
+            тся в документах\",<br />\r\n            \"Единицу измерения нельзя пе\
+            реименовать, так как она используется в документах\""
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Товар не найден
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Товар с таким названием уже существует
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Обновление товара
+      tags:
+      - Elba
+  /organizations/{organizationId}/products/{productId}:
+    get:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Идентификатор товара
+        explode: false
+        in: path
+        name: productId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: Информация о товаре
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Товар не найден
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Получение товара
+      tags:
+      - Elba
+  /organizations/{organizationId}/products/search:
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SearchProductsRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SearchProductsRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SearchProductsRequest'
+        description: Параметры поиска. Должен быть заполнен хотябы один
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchProductsTaskResult'
+          description: Результаты поиска товаров
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptedLongRunningTask'
+          description: Поставлена операция на поиск товаров
+          headers:
+            Location:
+              description: Путь проверки статуса операции поиска
+              explode: false
+              schema:
+                description: Путь проверки статуса операции поиска
+                format: ""
+                type: string
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Некорректно заполнен фильтр поиска. <br />\r\n           \
+            \ Возможные причины:<br />\r\n            \"Должен быть заполнен хотя\
+            \ бы один параметр фильтра\""
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Поиск товаров
+      tags:
+      - Elba
+  /organizations/{organizationId}/document-news:
+    get:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: "Позиция, начиная с которой будут вычитываться новости"
+        explode: true
+        in: query
+        name: offset
+        required: true
+        schema:
+          format: int64
+          minimum: 0
+          type: integer
+        style: form
+      - description: Максимальное количество новостей для получения. По-умолчанию
+          100
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 1000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDocumentNewsResponse'
+          description: Список новостей
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Получение списка новостей по документам
+      tags:
+      - Elba
+  /organizations/{organizationId}/document-news/subscription:
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Подписка успешно создана
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Подписаться на новости по документам
+      tags:
+      - Elba
+  /organizations/{organizationId}/universal-transfer-documents:
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateUniversalTransferDocumentRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateUniversalTransferDocumentRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateUniversalTransferDocumentRequest'
+        description: Данные универсального передаточного документа
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUniversalTransferDocumentResponse'
+          description: Универсальный передаточный документ успешно создан
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Запрос сформирован некорректно и не может быть обработан.<br\
+            \ /><br />\r\n            Возможные причины:<br />\r\n            \"Дл\
+            я УПД без основания поле ReasonDate должно принимать значение null\",<br\
+            \ />\r\n            \"Для услуг поле UniversalTransferDocumentItemToCreate.OriginOfProductCountry\
+            \ должно принимать значение null\",<br />\r\n            \"Для услуг п\
+            оле UniversalTransferDocumentItemToCreate.RNPT должно принимать значен\
+            ие null\",<br />\r\n            \"Неизвестная страна происхождения тов\
+            ара\",<br />\r\n            \"Указанный рассчётный счёт не найден\",<br\
+            \ />\r\n            \"Указанный рассчётный счёт закрыт\",<br />\r\n  \
+            \          \"Указанный рассчётный счёт не является рублевым\",<br />\r\
+            \n            \"Указанный грузополучатель не найден\",<br />\r\n     \
+            \       \"Указанный контрагент не найден\",<br />\r\n            \"Для\
+            \ УПД без скидки поле Discount должно принимать значение null\",<br />\r\
+            \n            \"Для УПД со счётом-фактурой (статус 1) должен быть указ\
+            ан контрагент с заполненным ИНН\",<br />\r\n            \"Для УПД со с\
+            чётом-фактурой (статус 1) должен быть указан контрагент с заполненным\
+            \ КПП (Для контрагента ООО)\",<br />\r\n            \"Для УПД со счёто\
+            м-фактурой (статус 1) должен быть указан контрагент с заполненым юриди\
+            ческим адресом\",<br />\r\n            \"Для УПД без счета-фактуры (ст\
+            атус 2) поле UniversalTransferDocumentItemToCreate.NDSRate должно прин\
+            имать значение null\",<br />\r\n            \"Для УПД без счета-фактур\
+            ы (статус 2) поле SumsWithNDS не может принимать значение true\",<br />\r\
+            \n            \"Для УПД с включенным флагом WithProductTracing в товар\
+            е с заполненным полем RNPT поле UniversalTransferDocumentItemToCreate.Quantity\
+            \ должно принимать значение больше 0\",<br />\r\n            \"Для УПД\
+            \ с включенным флагом WithProductTracing в товаре с заполненным полем\
+            \ RNPT поле UniversalTransferDocumentItemToCreate.Price должно принима\
+            ть значение больше 0\",<br />\r\n            \"Для УПД с отключенным ф\
+            лагом WithProductTracing поле UniversalTransferDocumentItemToCreate.OriginOfProductCountry\
+            \ должно принимать значение null\",<br />\r\n            \"Для УПД с о\
+            тключенным флагом WithProductTracing поле UniversalTransferDocumentItemToCreate.RNPT\
+            \ должно принимать значение null\".<br /><br />\r\n            Ошибки\
+            , связанные с реквизитами ИП:<br />\r\n            \"Для УПД со счётом\
+            -фактурой (статус 1) требуется заполнить имя в реквизитах\",<br />\r\n\
+            \            \"Для УПД со счётом-фактурой (статус 1) требуется заполни\
+            ть фамилию в реквизитах\",<br />\r\n            \"Для УПД со счётом-фа\
+            ктурой (статус 1) требуется заполнить ИНН в реквизитах\",<br />\r\n  \
+            \          \"Для УПД со счётом-фактурой (статус 1) требуется заполнить\
+            \ фактический адрес в реквизитах\",<br />\r\n            \"Для УПД со\
+            \ счётом-фактурой (статус 1) требуется заполнить свидетельство о гос.\
+            \ регистрации в реквизитах\".<br /><br />\r\n            Ошибки, связа\
+            нные с реквизитами ООО:<br />\r\n            \"Для УПД со счётом-факту\
+            рой (статус 1) требуется заполнить краткое название организации в рекв\
+            изитах\",<br />\r\n            \"Для УПД со счётом-фактурой (статус 1)\
+            \ требуется заполнить имя руководителя в реквизитах\",<br />\r\n     \
+            \       \"Для УПД со счётом-фактурой (статус 1) требуется заполнить кр\
+            аткое название организации в реквизитах\",<br />\r\n            \"Для\
+            \ УПД со счётом-фактурой (статус 1) требуется заполнить фамилию руково\
+            дителя в реквизитах\",<br />\r\n            \"Для УПД со счётом-фактур\
+            ой (статус 1) требуется заполнить ИНН в реквизитах\",<br />\r\n      \
+            \      \"Для УПД со счётом-фактурой (статус 1) требуется заполнить КПП\
+            \ в реквизитах\",<br />\r\n            \"Для УПД со счётом-фактурой (с\
+            татус 1) требуется заполнить фактический адрес в реквизитах\"<br />"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Создание исходящего универсального передаточного документа
+      tags:
+      - Elba
+  /organizations/{organizationId}/delivery-notes:
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateDeliveryNoteRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateDeliveryNoteRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateDeliveryNoteRequest'
+        description: Данные накладной
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDeliveryNoteResponse'
+          description: Накладная успешно создана
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Запрос сформирован некорректно и не может быть обработан.<br\
+            \ /><br />\r\n            Возможные причины:<br />\r\n            \"Ук\
+            азанный контрагент не найден\",<br />\r\n            \"Указанный грузо\
+            получатель не найден\",<br />\r\n            \"Указанный рассчётный сч\
+            ёт не найден\",<br />\r\n            \"Указанный рассчётный счёт закры\
+            т\",<br />\r\n            \"Указанный рассчётный счёт не является рубл\
+            евым\",<br />\r\n            \"В накладной без НДС цена за единицу тов\
+            ара не может включать в себя НДС\",<br />\r\n            \"Для накладн\
+            ой без скидки поле Discount должно принимать значение null\",<br />\r\n\
+            \            \"Для накладной без основания поле ReasonDate должно прин\
+            имать значение null\",<br />\r\n            \"Для накладной без НДС по\
+            ле DeliveryNoteItemToCreate.NDSRate должно принимать значение null\""
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Создание исходящей накладной
+      tags:
+      - Elba
+  /organizations/{organizationId}/bills:
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateBillRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateBillRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateBillRequest'
+        description: Данные счёта
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBillResponse'
+          description: Счёт успешно создан
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Запрос сформирован некорректно и не может быть обработан.<br\
+            \ /><br />\r\n            Возможные причины:<br />\r\n            \"Ук\
+            азанный контрагент не найден\",<br />\r\n            \"Указанный рассч\
+            ётный счёт не найден\",<br />\r\n            \"Указанный рассчётный сч\
+            ёт закрыт\",<br />\r\n            \"Указанный рассчётный счёт не являе\
+            тся рублевым\",<br />\r\n            \"Для счёта без скидки поле Discount\
+            \ должно принимать значение null\",<br />\r\n            \"В счёте без\
+            \ НДС цена за единицу товара не может включать в себя НДС\",<br />\r\n\
+            \            \"Для счёта без НДС поле BillItemToCreate.NDSRate должно\
+            \ принимать значение null\""
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Создание исходящего счёта
+      tags:
+      - Elba
+  /organizations/{organizationId}/bills/{billId}:
+    get:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Идентификатор счёта
+        explode: false
+        in: path
+        name: billId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+          description: Информация о счёте
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Счёт не найден
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Получение исходящего счёта
+      tags:
+      - Elba
+  /organizations/{organizationId}/acts:
+    post:
+      parameters:
+      - description: Идентификатор организации
+        example: 972252c5-6551-4ec4-90ad-cb5b296490cb
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateActRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateActRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateActRequest'
+        description: Данные акта
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateActResponse'
+          description: Акт успешно создан
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: "Запрос сформирован некорректно и не может быть обработан.<br\
+            \ /><br />\r\n            Возможные причины:<br />\r\n            \"Ук\
+            азанный контрагент не найден\",<br />\r\n            \"Указанный рассч\
+            ётный счёт не найден\",<br />\r\n            \"Указанный рассчётный сч\
+            ёт закрыт\",<br />\r\n            \"Указанный рассчётный счёт не являе\
+            тся рублевым\",<br />\r\n            \"В акте без НДС цена за единицу\
+            \ товара не может включать в себя НДС\",<br />\r\n            \"Для ак\
+            та без основания поле ReasonDate должно принимать значение null\",<br\
+            \ />\r\n            \"Для акта без скидки поле Discount должно принима\
+            ть значение null\",<br />\r\n            \"Для акта без НДС поле ActItemToCreate.NDSRate\
+            \ должно принимать значение null\""
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Создание исходящего акта
+      tags:
+      - Elba
+  /long-running-tasks/{taskId}:
+    get:
+      parameters:
+      - description: Идентификатор длительной операции
+        explode: false
+        in: path
+        name: taskId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LongRunningTaskState'
+          description: Состояние операции
+          headers:
+            Retry-After:
+              description: Рекомендуемое количество секунд ожидания перед следующим
+                запросом состояния операции
+              explode: false
+              schema:
+                description: Рекомендуемое количество секунд ожидания перед следующим
+                  запросом состояния операции
+                format: ""
+                type: integer
+              style: simple
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка аутентификации
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Текущий тариф не позволяет выполнить запрашиваемое действие
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Ошибка авторизации
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Операция не найдена
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Внутренняя ошибка сервиса
+      summary: Получить состояние операции
+      tags:
+      - Elba
+components:
+  schemas:
+    AcceptedLongRunningTask:
+      additionalProperties: false
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        type: ""
+        status: ""
+      properties:
+        id:
+          description: Идентификатор асинхронной операции
+          format: uuid
+          type: string
+        status:
+          allOf:
+          - $ref: '#/components/schemas/LongRunningTaskStatus'
+          description: |-
+            Статус асинхронной операции
+
+            inProcess (Операция в обработке)
+
+            completed (Операция успешно обработана)
+
+            failed (Ошибка при выполнении операции)
+          x-enum-varnames:
+          - InProcess
+          - Completed
+          - Failed
+          x-enum-descriptions:
+          - Операция в обработке
+          - Операция успешно обработана
+          - Ошибка при выполнении операции
+        type:
+          allOf:
+          - $ref: '#/components/schemas/LongRunningTaskType'
+          description: |-
+            Тип задачи
+
+            searchContractors (Операция поиска контрагентов)
+
+            searchProducts (Операция поиска товаров)
+
+            createProduct (Операция создания товара)
+
+            updateProduct (Операция обновления товара)
+          x-enum-varnames:
+          - SearchContractors
+          - SearchProducts
+          - CreateProduct
+          - UpdateProduct
+          x-enum-descriptions:
+          - Операция поиска контрагентов
+          - Операция поиска товаров
+          - Операция создания товара
+          - Операция обновления товара
+      required:
+      - id
+      - status
+      - type
+      type: object
+    ActItemToCreate:
+      additionalProperties: false
+      example:
+        ndsRate: WithoutNds
+        quantity: 12345679000
+        unitName: шт.
+        price: 12345679
+        discount: 12.99
+        productName: Услуга за ноябрь
+      properties:
+        productName:
+          description: Наименование товара или услуги
+          example: Услуга за ноябрь
+          maxLength: 400
+          minLength: 1
+          type: string
+        unitName:
+          description: Единицы измерения
+          example: шт.
+          maxLength: 1000
+          minLength: 1
+          type: string
+        quantity:
+          description: Количество
+          example: 12345679000
+          format: double
+          maximum: 99999999999.9999
+          minimum: 0
+          type: number
+        price:
+          description: Цена за единицу товара
+          example: 12345679
+          format: double
+          maximum: 99999999.9999999
+          minimum: 0
+          nullable: true
+          type: number
+        ndsRate:
+          allOf:
+          - $ref: '#/components/schemas/NDSRateToSave'
+          description: |-
+            НДС
+
+            withoutNds (Без НДС)
+
+            nds0 (0%)
+
+            nds5 (5%)
+
+            nds10 (10%)
+
+            nds20 (20%)
+          example: WithoutNds
+          nullable: true
+        discount:
+          description: Скидка
+          example: 12.99
+          format: double
+          maximum: 100
+          minimum: 0
+          nullable: true
+          type: number
+      required:
+      - productName
+      - quantity
+      - unitName
+      type: object
+    Bank:
+      additionalProperties: false
+      properties:
+        name:
+          description: Название банка
+          example: Контур.Банк
+          nullable: true
+          type: string
+        bik:
+          description: БИК
+          example: "046577904"
+          nullable: true
+          type: string
+        corrAccount:
+          description: Корреспондентский счёт
+          example: "30101810500000000904"
+          nullable: true
+          type: string
+        city:
+          description: Населенный пункт
+          example: Екатеринбург
+          nullable: true
+          type: string
+        cityType:
+          description: Тип населенного пункта
+          example: г.
+          nullable: true
+          type: string
+      type: object
+    BankAccount:
+      additionalProperties: false
+      example:
+        bank: ""
+        closed: true
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        accountNumber: 7071 9810 5916 4699 2616
+      properties:
+        id:
+          description: Идентификатор банковского счёта
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        accountNumber:
+          description: Номер банковского счёта
+          example: 7071 9810 5916 4699 2616
+          nullable: true
+          type: string
+        bank:
+          allOf:
+          - $ref: '#/components/schemas/Bank'
+          description: Информация о банке
+        closed:
+          description: Закрытость счета
+          type: boolean
+      required:
+      - bank
+      - closed
+      - id
+      type: object
+    Bill:
+      additionalProperties: false
+      example:
+        date: 2023-12-31
+        number: "311"
+        withNDS: true
+        contractorId: b79d3808-beef-4ce8-b27a-1192e7366d4e
+        bankAccountId: c01999df-7dc3-4f5a-b815-f7cd35573012
+        comment: "Счёт выставлен на основании договора №0034, срок оплаты — 5 рабо\
+          чих дней."
+        sumsWithNds: true
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        warehouseItems:
+        - ndsRate: WithoutNds
+          quantity: 12345679000
+          unitName: шт.
+          price: 12345679
+          discount: 15
+          sum: 10.02
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          productName: Услуга за ноябрь
+        - ndsRate: WithoutNds
+          quantity: 12345679000
+          unitName: шт.
+          price: 12345679
+          discount: 15
+          sum: 10.02
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          productName: Услуга за ноябрь
+        withDiscount: true
+        status: "true"
+      properties:
+        id:
+          description: Идентификатор счёта
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        number:
+          description: Номер счёта
+          example: "311"
+          type: string
+        date:
+          description: Дата счёта
+          example: 2023-12-31
+          format: date
+          type: string
+        withNDS:
+          description: Ндс
+          example: true
+          nullable: true
+          type: boolean
+        withDiscount:
+          description: Cчёт выставлен со скидкой
+          example: true
+          nullable: true
+          type: boolean
+        comment:
+          description: Комментарий
+          example: "Счёт выставлен на основании договора №0034, срок оплаты — 5 ра\
+            бочих дней."
+          nullable: true
+          type: string
+        bankAccountId:
+          description: Идентификатор банковского счёта
+          example: c01999df-7dc3-4f5a-b815-f7cd35573012
+          format: uuid
+          nullable: true
+          type: string
+        contractorId:
+          description: Идентификатор контрагента
+          example: b79d3808-beef-4ce8-b27a-1192e7366d4e
+          format: uuid
+          nullable: true
+          type: string
+        warehouseItems:
+          description: Фактурная часть
+          items:
+            $ref: '#/components/schemas/BillItem'
+          nullable: true
+          type: array
+        sumsWithNds:
+          description: Цена за единицу товара включает в себя НДС
+          example: true
+          nullable: true
+          type: boolean
+        status:
+          allOf:
+          - $ref: '#/components/schemas/BillStatus'
+          description: |-
+            Статус оплаты.
+
+            notPaid (Не оплачен)
+
+            paid (Оплачен)
+
+            partiallyPaid (Частично оплачен)
+
+            rejected (Отменён)
+
+            overdue (Истёк срок оплаты)
+          example: "true"
+          x-enum-varnames:
+          - NotPaid
+          - Paid
+          - PartiallyPaid
+          - Rejected
+          - Overdue
+          x-enum-descriptions:
+          - Не оплачен
+          - Оплачен
+          - Частично оплачен
+          - Отменён
+          - Истёк срок оплаты
+      required:
+      - date
+      - id
+      - number
+      - status
+      type: object
+    BillItem:
+      additionalProperties: false
+      example:
+        ndsRate: WithoutNds
+        quantity: 12345679000
+        unitName: шт.
+        price: 12345679
+        discount: 15
+        sum: 10.02
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        productName: Услуга за ноябрь
+      properties:
+        id:
+          description: Идентификатор позиции
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        productName:
+          description: Наименование товара или услуги
+          example: Услуга за ноябрь
+          nullable: true
+          type: string
+        unitName:
+          description: Единицы измерения
+          example: шт.
+          nullable: true
+          type: string
+        quantity:
+          description: Количество
+          example: 12345679000
+          format: double
+          type: number
+        price:
+          description: Цена за единицу товара
+          example: 12345679
+          format: double
+          nullable: true
+          type: number
+        sum:
+          description: Сумма
+          example: 10.02
+          format: double
+          nullable: true
+          type: number
+        ndsRate:
+          allOf:
+          - $ref: '#/components/schemas/NDSRate'
+          description: |-
+            НДС
+
+            withoutNds (Без НДС)
+
+            nds0 (0%)
+
+            nds5 (5%)
+
+            nds10 (10%)
+
+            nds18 (18%)
+
+            nds20 (20%)
+          example: WithoutNds
+          x-enum-varnames:
+          - WithoutNds
+          - Nds0
+          - Nds5
+          - Nds10
+          - Nds18
+          - Nds20
+          x-enum-descriptions:
+          - Без НДС
+          - 0%
+          - 5%
+          - 10%
+          - 18%
+          - 20%
+        discount:
+          description: Скидка
+          example: 15
+          format: double
+          nullable: true
+          type: number
+      required:
+      - id
+      - ndsRate
+      - quantity
+      type: object
+    BillItemToCreate:
+      additionalProperties: false
+      example:
+        ndsRate: WithoutNds
+        quantity: 12345679000
+        unitName: шт.
+        price: 12345679
+        discount: 12.99
+        productName: Услуга за ноябрь
+      properties:
+        productName:
+          description: Наименование товара или услуги
+          example: Услуга за ноябрь
+          maxLength: 400
+          minLength: 1
+          type: string
+        unitName:
+          description: Единицы измерения
+          example: шт.
+          maxLength: 1000
+          minLength: 1
+          type: string
+        quantity:
+          description: Количество
+          example: 12345679000
+          format: double
+          maximum: 99999999999.9999
+          minimum: 0
+          type: number
+        price:
+          description: Цена за единицу товара
+          example: 12345679
+          format: double
+          maximum: 99999999.9999999
+          minimum: 0
+          nullable: true
+          type: number
+        ndsRate:
+          allOf:
+          - $ref: '#/components/schemas/NDSRateToSave'
+          description: |-
+            НДС
+
+            withoutNds (Без НДС)
+
+            nds0 (0%)
+
+            nds5 (5%)
+
+            nds10 (10%)
+
+            nds20 (20%)
+          example: WithoutNds
+          nullable: true
+        discount:
+          description: Скидка
+          example: 12.99
+          format: double
+          maximum: 100
+          minimum: 0
+          nullable: true
+          type: number
+      required:
+      - productName
+      - quantity
+      - unitName
+      type: object
+    BillPaymentNewsContent:
+      additionalProperties: false
+      example:
+        billId: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        relatedPaymentsSum: 90
+        billSum: 100
+        billStatus: Overdue
+      properties:
+        billId:
+          description: Идентификатор счёта
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        billStatus:
+          allOf:
+          - $ref: '#/components/schemas/BillStatus'
+          description: |-
+            Статус оплаченности счёта.
+
+            notPaid (Не оплачен)
+
+            paid (Оплачен)
+
+            partiallyPaid (Частично оплачен)
+
+            rejected (Отменён)
+
+            overdue (Истёк срок оплаты)
+          example: Overdue
+          x-enum-varnames:
+          - NotPaid
+          - Paid
+          - PartiallyPaid
+          - Rejected
+          - Overdue
+          x-enum-descriptions:
+          - Не оплачен
+          - Оплачен
+          - Частично оплачен
+          - Отменён
+          - Истёк срок оплаты
+        relatedPaymentsSum:
+          description: Сумма привязанных к счёту операций
+          example: 90
+          format: double
+          type: number
+        billSum:
+          description: Сумма счёта
+          example: 100
+          format: double
+          type: number
+      required:
+      - billId
+      - billStatus
+      - billSum
+      - relatedPaymentsSum
+      type: object
+    BillStatus:
+      description: |2-
+
+
+        notPaid (Не оплачен)
+
+        paid (Оплачен)
+
+        partiallyPaid (Частично оплачен)
+
+        rejected (Отменён)
+
+        overdue (Истёк срок оплаты)
+      enum:
+      - notPaid
+      - paid
+      - partiallyPaid
+      - rejected
+      - overdue
+      type: string
+      x-enum-varnames:
+      - NotPaid
+      - Paid
+      - PartiallyPaid
+      - Rejected
+      - Overdue
+      x-enum-descriptions:
+      - Не оплачен
+      - Оплачен
+      - Частично оплачен
+      - Отменён
+      - Истёк срок оплаты
+    Contractor:
+      additionalProperties: false
+      example:
+        ogrn: "336139201874884"
+        address: "г. Скрентон, пр. Слау, 1725, оф. 200"
+        name: name
+        inn: "7766558001"
+        postAddress: "г. Панорама, пр. Сатикой, 13927, оф. 200"
+        kpp: "776655001"
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        shortName: shortName
+        contacts:
+        - emails:
+          - emails
+          - emails
+          post: Менеджер проектов
+          phone: +7 (343) 111-11-11
+          name: Скотт Майкл
+          comment: Лучший босс в мире
+        - emails:
+          - emails
+          - emails
+          post: Менеджер проектов
+          phone: +7 (343) 111-11-11
+          name: Скотт Майкл
+          comment: Лучший босс в мире
+        okpo: "47296611"
+      properties:
+        id:
+          description: Идентификатор созданного контрагента
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        name:
+          description: Полное название контрагента
+          type: string
+        shortName:
+          description: Краткое название контрагента
+          nullable: true
+          type: string
+        inn:
+          description: ИНН
+          example: "7766558001"
+          nullable: true
+          type: string
+        kpp:
+          description: КПП
+          example: "776655001"
+          nullable: true
+          type: string
+        address:
+          description: Юридический адрес
+          example: "г. Скрентон, пр. Слау, 1725, оф. 200"
+          nullable: true
+          type: string
+        postAddress:
+          description: Фактический адрес
+          example: "г. Панорама, пр. Сатикой, 13927, оф. 200"
+          nullable: true
+          type: string
+        okpo:
+          description: ОКПО
+          example: "47296611"
+          nullable: true
+          type: string
+        ogrn:
+          description: ОГРН
+          example: "336139201874884"
+          nullable: true
+          type: string
+        contacts:
+          description: Контакты
+          items:
+            $ref: '#/components/schemas/ContractorContact'
+          nullable: true
+          type: array
+      required:
+      - id
+      - name
+      type: object
+    ContractorContact:
+      additionalProperties: false
+      example:
+        emails:
+        - emails
+        - emails
+        post: Менеджер проектов
+        phone: +7 (343) 111-11-11
+        name: Скотт Майкл
+        comment: Лучший босс в мире
+      properties:
+        name:
+          description: Имя
+          example: Скотт Майкл
+          maxLength: 400
+          minLength: 1
+          nullable: true
+          type: string
+        post:
+          description: Должность
+          example: Менеджер проектов
+          maxLength: 400
+          minLength: 1
+          nullable: true
+          type: string
+        phone:
+          description: Телефон
+          example: +7 (343) 111-11-11
+          maxLength: 400
+          minLength: 1
+          nullable: true
+          type: string
+        emails:
+          description: Почта
+          items:
+            maxLength: 400
+            minLength: 1
+            type: string
+          nullable: true
+          type: array
+        comment:
+          description: Комментарий
+          example: Лучший босс в мире
+          maxLength: 400
+          minLength: 1
+          nullable: true
+          type: string
+      required:
+      - emails
+      type: object
+    CreateActRequest:
+      additionalProperties: false
+      example:
+        date: 2023-12-31
+        reasonName: Договор №28
+        number: "322"
+        withNDS: true
+        contractorId: b79d3808-beef-4ce8-b27a-1192e7366d4e
+        bankAccountId: c01999df-7dc3-4f5a-b815-f7cd35573012
+        reasonDate: 2023-12-29
+        comment: "Заказчик не имеет претензий по срокам, качеству и объему товаров\
+          \ и услуг."
+        sumsWithNDS: true
+        warehouseItems:
+        - ndsRate: WithoutNds
+          quantity: 12345679000
+          unitName: шт.
+          price: 12345679
+          discount: 12.99
+          productName: Услуга за ноябрь
+        - ndsRate: WithoutNds
+          quantity: 12345679000
+          unitName: шт.
+          price: 12345679
+          discount: 12.99
+          productName: Услуга за ноябрь
+        withDiscount: true
+      properties:
+        number:
+          description: "Номер акта. Если номер не указан, то номер будет сгенериро\
+            ван Эльбой"
+          example: "322"
+          maxLength: 30
+          minLength: 1
+          nullable: true
+          type: string
+        date:
+          description: Дата акта
+          example: 2023-12-31
+          format: date
+          type: string
+        withNDS:
+          description: Ндс
+          example: true
+          nullable: true
+          type: boolean
+        reasonName:
+          description: Основание
+          example: Договор №28
+          maxLength: 10000
+          minLength: 1
+          nullable: true
+          type: string
+        comment:
+          description: Комментарий
+          example: "Заказчик не имеет претензий по срокам, качеству и объему товар\
+            ов и услуг."
+          maxLength: 10000
+          minLength: 1
+          nullable: true
+          type: string
+        reasonDate:
+          description: Дата основания
+          example: 2023-12-29
+          format: date
+          nullable: true
+          type: string
+        bankAccountId:
+          description: Идентификатор банковского счёта
+          example: c01999df-7dc3-4f5a-b815-f7cd35573012
+          format: uuid
+          nullable: true
+          type: string
+        contractorId:
+          description: Идентификатор контрагента
+          example: b79d3808-beef-4ce8-b27a-1192e7366d4e
+          format: uuid
+          nullable: true
+          type: string
+        sumsWithNDS:
+          description: Цена за единицу товара включает в себя НДС
+          example: true
+          nullable: true
+          type: boolean
+        withDiscount:
+          description: Выставить акт со скидкой
+          example: true
+          nullable: true
+          type: boolean
+        warehouseItems:
+          description: Фактурная часть
+          items:
+            $ref: '#/components/schemas/ActItemToCreate'
+          nullable: true
+          type: array
+      required:
+      - date
+      type: object
+    CreateActResponse:
+      additionalProperties: false
+      example:
+        id: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+      properties:
+        id:
+          description: Идентификатор созданного документа
+          example: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+          format: uuid
+          type: string
+      required:
+      - id
+      type: object
+    CreateBankAccountRequest:
+      additionalProperties: false
+      example:
+        bik: "046577904"
+        accountNumber: "70719810591646992616"
+      properties:
+        accountNumber:
+          description: Номер банковского счёта
+          example: "70719810591646992616"
+          maxLength: 20
+          minLength: 20
+          type: string
+        bik:
+          description: БИК
+          example: "046577904"
+          maxLength: 9
+          minLength: 9
+          type: string
+      required:
+      - accountNumber
+      - bik
+      type: object
+    CreateBankAccountResponse:
+      additionalProperties: false
+      example:
+        id: ed7d3e13-d7eb-474a-9da1-cb30428a404f
+      properties:
+        id:
+          description: Идентификатор созданного банковского счёта
+          example: ed7d3e13-d7eb-474a-9da1-cb30428a404f
+          format: uuid
+          type: string
+      required:
+      - id
+      type: object
+    CreateBillRequest:
+      additionalProperties: false
+      example:
+        date: 2023-12-31
+        number: "311"
+        withNDS: true
+        contractorId: b79d3808-beef-4ce8-b27a-1192e7366d4e
+        bankAccountId: c01999df-7dc3-4f5a-b815-f7cd35573012
+        comment: "Счёт выставлен на основании договора №0034, срок оплаты — 5 рабо\
+          чих дней."
+        sumsWithNDS: true
+        warehouseItems:
+        - ndsRate: WithoutNds
+          quantity: 12345679000
+          unitName: шт.
+          price: 12345679
+          discount: 12.99
+          productName: Услуга за ноябрь
+        - ndsRate: WithoutNds
+          quantity: 12345679000
+          unitName: шт.
+          price: 12345679
+          discount: 12.99
+          productName: Услуга за ноябрь
+        withDiscount: true
+      properties:
+        number:
+          description: "Номер счёта. Если номер не указан, то номер будет сгенерир\
+            ован Эльбой"
+          example: "311"
+          maxLength: 30
+          minLength: 1
+          nullable: true
+          type: string
+        date:
+          description: Дата счёта
+          example: 2023-12-31
+          format: date
+          type: string
+        withNDS:
+          description: Ндс
+          example: true
+          nullable: true
+          type: boolean
+        comment:
+          description: Комментарий
+          example: "Счёт выставлен на основании договора №0034, срок оплаты — 5 ра\
+            бочих дней."
+          maxLength: 10000
+          minLength: 1
+          nullable: true
+          type: string
+        bankAccountId:
+          description: Идентификатор банковского счёта
+          example: c01999df-7dc3-4f5a-b815-f7cd35573012
+          format: uuid
+          nullable: true
+          type: string
+        contractorId:
+          description: Идентификатор контрагента
+          example: b79d3808-beef-4ce8-b27a-1192e7366d4e
+          format: uuid
+          nullable: true
+          type: string
+        sumsWithNDS:
+          description: Цена за единицу товара включает в себя НДС
+          example: true
+          nullable: true
+          type: boolean
+        withDiscount:
+          description: Выставить счёт со скидкой
+          example: true
+          nullable: true
+          type: boolean
+        warehouseItems:
+          description: Фактурная часть
+          items:
+            $ref: '#/components/schemas/BillItemToCreate'
+          nullable: true
+          type: array
+      required:
+      - date
+      type: object
+    CreateBillResponse:
+      additionalProperties: false
+      example:
+        id: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+      properties:
+        id:
+          description: Идентификатор созданного документа
+          example: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+          format: uuid
+          type: string
+      required:
+      - id
+      type: object
+    CreateContractorRequest:
+      additionalProperties: false
+      example:
+        ogrn: "336139201874884"
+        address: "г. Скрентон, пр. Слау, 1725, оф. 200"
+        name: name
+        inn: "7766558001"
+        postAddress: "г. Панорама, пр. Сатикой, 13927, оф. 200"
+        kpp: "776655001"
+        shortName: shortName
+        contacts:
+        - emails:
+          - emails
+          - emails
+          post: Менеджер проектов
+          phone: +7 (343) 111-11-11
+          name: Скотт Майкл
+          comment: Лучший босс в мире
+        - emails:
+          - emails
+          - emails
+          post: Менеджер проектов
+          phone: +7 (343) 111-11-11
+          name: Скотт Майкл
+          comment: Лучший босс в мире
+        okpo: "47296611"
+      properties:
+        name:
+          description: Полное название контрагента
+          maxLength: 400
+          minLength: 1
+          type: string
+        inn:
+          description: ИНН
+          example: "7766558001"
+          maxLength: 12
+          minLength: 10
+          nullable: true
+          type: string
+        kpp:
+          description: КПП
+          example: "776655001"
+          maxLength: 9
+          minLength: 9
+          nullable: true
+          type: string
+        shortName:
+          description: Краткое название контрагента
+          maxLength: 400
+          minLength: 1
+          nullable: true
+          type: string
+        address:
+          description: Юридический адрес
+          example: "г. Скрентон, пр. Слау, 1725, оф. 200"
+          maxLength: 2000
+          minLength: 1
+          nullable: true
+          type: string
+        postAddress:
+          description: Фактический адрес
+          example: "г. Панорама, пр. Сатикой, 13927, оф. 200"
+          maxLength: 2000
+          minLength: 1
+          nullable: true
+          type: string
+        okpo:
+          description: ОКПО
+          example: "47296611"
+          maxLength: 10
+          minLength: 8
+          nullable: true
+          type: string
+        ogrn:
+          description: ОГРН
+          example: "336139201874884"
+          maxLength: 15
+          minLength: 13
+          nullable: true
+          type: string
+        contacts:
+          description: Контакты
+          items:
+            $ref: '#/components/schemas/ContractorContact'
+          nullable: true
+          type: array
+      required:
+      - name
+      type: object
+    CreateContractorResponse:
+      additionalProperties: false
+      example:
+        id: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+      properties:
+        id:
+          description: Идентификатор созданного контрагента
+          example: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+          format: uuid
+          type: string
+      required:
+      - id
+      type: object
+    CreateDeliveryNoteRequest:
+      additionalProperties: false
+      example:
+        date: 2023-12-31
+        reasonName: Договор №28
+        number: "311"
+        withNDS: true
+        contractorId: b79d3808-beef-4ce8-b27a-1192e7366d4e
+        bankAccountId: c01999df-7dc3-4f5a-b815-f7cd35573012
+        reasonDate: 2023-12-29
+        sumsWithNDS: true
+        consigneeId: b79d3808-beef-4ce8-b27a-1192e7366d4e
+        warehouseItems:
+        - ndsRate: WithoutNds
+          quantity: 12345679000
+          unitName: шт.
+          price: 12345679
+          discount: 12.99
+          productName: Бумага
+        - ndsRate: WithoutNds
+          quantity: 12345679000
+          unitName: шт.
+          price: 12345679
+          discount: 12.99
+          productName: Бумага
+        withDiscount: true
+      properties:
+        number:
+          description: "Номер накладной. Если номер не указан, то номер будет сген\
+            ерирован Эльбой"
+          example: "311"
+          maxLength: 30
+          minLength: 1
+          nullable: true
+          type: string
+        date:
+          description: Дата накладной
+          example: 2023-12-31
+          format: date
+          type: string
+        withNDS:
+          description: Ндс
+          example: true
+          nullable: true
+          type: boolean
+        bankAccountId:
+          description: Идентификатор банковского счёта
+          example: c01999df-7dc3-4f5a-b815-f7cd35573012
+          format: uuid
+          nullable: true
+          type: string
+        contractorId:
+          description: Идентификатор контрагента
+          example: b79d3808-beef-4ce8-b27a-1192e7366d4e
+          format: uuid
+          nullable: true
+          type: string
+        sumsWithNDS:
+          description: Цена за единицу товара включает в себя НДС
+          example: true
+          nullable: true
+          type: boolean
+        consigneeId:
+          description: Идентификатор грузополучателя
+          example: b79d3808-beef-4ce8-b27a-1192e7366d4e
+          format: uuid
+          nullable: true
+          type: string
+        reasonName:
+          description: Основание
+          example: Договор №28
+          maxLength: 10000
+          minLength: 1
+          nullable: true
+          type: string
+        reasonDate:
+          description: Дата основания
+          example: 2023-12-29
+          format: date
+          nullable: true
+          type: string
+        withDiscount:
+          description: Выставить накладную со скидкой
+          example: true
+          nullable: true
+          type: boolean
+        warehouseItems:
+          description: Фактурная часть
+          items:
+            $ref: '#/components/schemas/DeliveryNoteItemToCreate'
+          nullable: true
+          type: array
+      required:
+      - date
+      type: object
+    CreateDeliveryNoteResponse:
+      additionalProperties: false
+      example:
+        id: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+      properties:
+        id:
+          description: Идентификатор созданного документа
+          example: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+          format: uuid
+          type: string
+      required:
+      - id
+      type: object
+    CreateProductError:
+      description: |2-
+
+
+        productWithSameNameExists (Уже есть товар с таким названием)
+      enum:
+      - productWithSameNameExists
+      type: string
+      x-enum-varnames:
+      - ProductWithSameNameExists
+      x-enum-descriptions:
+      - Уже есть товар с таким названием
+    CreateProductRequest:
+      additionalProperties: false
+      example:
+        amount: 5
+        names:
+        - isMain: true
+          name: Бумага
+        - isMain: true
+          name: Бумага
+        comment: Любой комментарий
+        units:
+        - isMain: true
+          name: шт.
+          ratio: 1
+        - isMain: true
+          name: шт.
+          ratio: 1
+        article: "1233412"
+      properties:
+        names:
+          description: Список названий товара
+          items:
+            $ref: '#/components/schemas/ProductNameToCreate'
+          minItems: 1
+          type: array
+        units:
+          description: Список единиц измерений товара
+          items:
+            $ref: '#/components/schemas/ProductUnitToCreate'
+          minItems: 1
+          type: array
+        article:
+          description: Артикул
+          example: "1233412"
+          maxLength: 900
+          minLength: 1
+          nullable: true
+          type: string
+        comment:
+          description: Комментарий
+          example: Любой комментарий
+          maxLength: 2000
+          minLength: 1
+          nullable: true
+          type: string
+        amount:
+          description: Количество на складе
+          example: 5
+          format: double
+          maximum: 99999999999.9999
+          minimum: 0
+          nullable: true
+          type: number
+      required:
+      - names
+      - units
+      type: object
+    CreateProductResponse:
+      additionalProperties: false
+      example:
+        id: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+      properties:
+        id:
+          description: Идентификатор созданного товара.
+          example: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+          format: uuid
+          nullable: true
+          type: string
+      type: object
+    CreateProductTaskResult:
+      additionalProperties: false
+      properties:
+        id:
+          description: "Идентификатор созданного товара. Заполнен, если нет ошибки\
+            \ создания товара"
+          example: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+          format: uuid
+          nullable: true
+          type: string
+        createProductError:
+          allOf:
+          - $ref: '#/components/schemas/CreateProductError'
+          description: |-
+            Ошибка при создании товара
+
+            productWithSameNameExists (Уже есть товар с таким названием)
+          nullable: true
+      type: object
+    CreateUniversalTransferDocumentRequest:
+      additionalProperties: false
+      example:
+        date: 2023-12-31
+        reasonName: Договор №28
+        stateContractIdentifier: "23249993004010000000"
+        contractorId: b79d3808-beef-4ce8-b27a-1192e7366d4e
+        number: "311"
+        bankAccountId: c01999df-7dc3-4f5a-b815-f7cd35573012
+        reasonDate: 2023-12-29
+        sumsWithNDS: true
+        withProductTracing: true
+        consigneeId: b79d3808-beef-4ce8-b27a-1192e7366d4e
+        warehouseItems:
+        - ndsRate: WithoutNds
+          quantity: 12345679000
+          unitName: шт.
+          rnpt: "11111111111111111111111111111"
+          price: 12345679
+          discount: 12.99
+          originOfProductCountry: Россия
+          productName: Услуга за ноябрь
+          productType: Service
+        - ndsRate: WithoutNds
+          quantity: 12345679000
+          unitName: шт.
+          rnpt: "11111111111111111111111111111"
+          price: 12345679
+          discount: 12.99
+          originOfProductCountry: Россия
+          productName: Услуга за ноябрь
+          productType: Service
+        status: Status1
+        withDiscount: true
+      properties:
+        number:
+          description: "Номер УПД. Если номер не указан, то номер будет сгенериров\
+            ан Эльбой"
+          example: "311"
+          maxLength: 30
+          minLength: 1
+          nullable: true
+          type: string
+        date:
+          description: Дата УПД
+          example: 2023-12-31
+          format: date
+          type: string
+        bankAccountId:
+          description: Идентификатор банковского счёта
+          example: c01999df-7dc3-4f5a-b815-f7cd35573012
+          format: uuid
+          nullable: true
+          type: string
+        contractorId:
+          description: Идентификатор контрагента
+          example: b79d3808-beef-4ce8-b27a-1192e7366d4e
+          format: uuid
+          nullable: true
+          type: string
+        sumsWithNDS:
+          description: Цена за единицу товара включает в себя НДС
+          example: true
+          nullable: true
+          type: boolean
+        consigneeId:
+          description: Идентификатор грузополучателя
+          example: b79d3808-beef-4ce8-b27a-1192e7366d4e
+          format: uuid
+          nullable: true
+          type: string
+        withProductTracing:
+          description: Продаю прослеживаемый товар
+          example: true
+          nullable: true
+          type: boolean
+        status:
+          allOf:
+          - $ref: '#/components/schemas/UniversalTransferDocumentStatus'
+          description: |-
+            Статус
+
+            status1 (Со счётом-фактурой, то есть с НДС)
+
+            status2 (Без счёта-фактуры)
+          example: Status1
+        stateContractIdentifier:
+          description: Идентификатор госконтракта
+          example: "23249993004010000000"
+          maxLength: 300
+          minLength: 1
+          nullable: true
+          type: string
+        reasonName:
+          description: Основание
+          example: Договор №28
+          maxLength: 10000
+          minLength: 1
+          nullable: true
+          type: string
+        reasonDate:
+          description: Дата основания
+          example: 2023-12-29
+          format: date
+          nullable: true
+          type: string
+        withDiscount:
+          description: Выставить УПД со скидкой
+          example: true
+          nullable: true
+          type: boolean
+        warehouseItems:
+          description: Фактурная часть
+          items:
+            $ref: '#/components/schemas/UniversalTransferDocumentItemToCreate'
+          nullable: true
+          type: array
+      required:
+      - date
+      - status
+      type: object
+    CreateUniversalTransferDocumentResponse:
+      additionalProperties: false
+      example:
+        id: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+      properties:
+        id:
+          description: Идентификатор созданного документа
+          example: 85ee52f3-9f55-458d-8eda-ee0d016ac3a7
+          format: uuid
+          type: string
+      required:
+      - id
+      type: object
+    DeliveryNoteItemToCreate:
+      additionalProperties: false
+      example:
+        ndsRate: WithoutNds
+        quantity: 12345679000
+        unitName: шт.
+        price: 12345679
+        discount: 12.99
+        productName: Бумага
+      properties:
+        productName:
+          description: Наименование товара или услуги
+          example: Бумага
+          maxLength: 400
+          minLength: 1
+          type: string
+        unitName:
+          description: Единица измерения
+          example: шт.
+          maxLength: 1000
+          minLength: 1
+          type: string
+        quantity:
+          description: Количество
+          example: 12345679000
+          format: double
+          maximum: 99999999999.9999
+          minimum: 0
+          type: number
+        price:
+          description: Цена за единицу товара
+          example: 12345679
+          format: double
+          maximum: 99999999.9999999
+          minimum: 0
+          nullable: true
+          type: number
+        ndsRate:
+          allOf:
+          - $ref: '#/components/schemas/NDSRateToSave'
+          description: |-
+            НДС
+
+            withoutNds (Без НДС)
+
+            nds0 (0%)
+
+            nds5 (5%)
+
+            nds10 (10%)
+
+            nds20 (20%)
+          example: WithoutNds
+          nullable: true
+        discount:
+          description: Скидка
+          example: 12.99
+          format: double
+          maximum: 100
+          minimum: 0
+          nullable: true
+          type: number
+      required:
+      - productName
+      - quantity
+      - unitName
+      type: object
+    DocumentNews:
+      additionalProperties: false
+      example:
+        newsContent:
+          billId: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          relatedPaymentsSum: 90
+          billSum: 100
+          billStatus: Overdue
+        id: 13
+        newsType: ""
+      properties:
+        id:
+          description: Идентификатор новости
+          example: 13
+          format: int64
+          type: integer
+        newsType:
+          allOf:
+          - $ref: '#/components/schemas/NewsType'
+          description: |-
+            Тип новости
+
+            billPaymentNews
+          x-enum-varnames:
+          - BillPaymentNews
+          x-enum-descriptions:
+          - ""
+        newsContent:
+          $ref: '#/components/schemas/DocumentNews_newsContent'
+      required:
+      - id
+      - newsContent
+      - newsType
+      type: object
+    Error:
+      additionalProperties: false
+      properties:
+        code:
+          nullable: true
+          type: string
+        message:
+          nullable: true
+          type: string
+        target:
+          nullable: true
+          type: string
+        details:
+          items:
+            $ref: '#/components/schemas/Error'
+          nullable: true
+          type: array
+        context:
+          additionalProperties: {}
+          nullable: true
+          type: object
+        innerError:
+          allOf:
+          - $ref: '#/components/schemas/Error'
+          nullable: true
+      type: object
+    ErrorResponse:
+      additionalProperties: false
+      example:
+        traceId: traceId
+        error: ""
+        statusCode: 0
+      properties:
+        statusCode:
+          format: int32
+          type: integer
+        traceId:
+          nullable: true
+          type: string
+        error:
+          allOf:
+          - $ref: '#/components/schemas/Error'
+      required:
+      - error
+      - statusCode
+      type: object
+    FoundContractor:
+      additionalProperties: false
+      example:
+        address: "г. Скрентон, пр. Слау, 1725, оф. 200"
+        name: name
+        inn: "7766558001"
+        kpp: "776655001"
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        shortName: shortName
+      properties:
+        id:
+          description: Идентификатор созданного контрагента
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        name:
+          description: Полное название контрагента
+          type: string
+        shortName:
+          description: Краткое название контрагента
+          nullable: true
+          type: string
+        inn:
+          description: ИНН
+          example: "7766558001"
+          nullable: true
+          type: string
+        kpp:
+          description: КПП
+          example: "776655001"
+          nullable: true
+          type: string
+        address:
+          description: Юридический адрес
+          example: "г. Скрентон, пр. Слау, 1725, оф. 200"
+          nullable: true
+          type: string
+      required:
+      - id
+      - name
+      type: object
+    FoundProduct:
+      additionalProperties: false
+      example:
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        article: "1233412"
+        productMainName: productMainName
+      properties:
+        id:
+          description: Идентификатор товара
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        productMainName:
+          description: Главное название товара
+          type: string
+        article:
+          description: Артикул
+          example: "1233412"
+          nullable: true
+          type: string
+      required:
+      - id
+      - productMainName
+      type: object
+    GetBankAccountsResponse:
+      additionalProperties: false
+      example:
+        bankAccounts:
+        - bank: ""
+          closed: true
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          accountNumber: 7071 9810 5916 4699 2616
+        - bank: ""
+          closed: true
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          accountNumber: 7071 9810 5916 4699 2616
+      properties:
+        bankAccounts:
+          description: Список банковских счетов
+          items:
+            $ref: '#/components/schemas/BankAccount'
+          type: array
+      required:
+      - bankAccounts
+      type: object
+    GetDocumentNewsResponse:
+      additionalProperties: false
+      example:
+        news:
+        - newsContent:
+            billId: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+            relatedPaymentsSum: 90
+            billSum: 100
+            billStatus: Overdue
+          id: 13
+          newsType: ""
+        - newsContent:
+            billId: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+            relatedPaymentsSum: 90
+            billSum: 100
+            billStatus: Overdue
+          id: 13
+          newsType: ""
+      properties:
+        news:
+          description: Новости
+          items:
+            $ref: '#/components/schemas/DocumentNews'
+          type: array
+      required:
+      - news
+      type: object
+    GetOrganizationsResponse:
+      additionalProperties: false
+      example:
+        organizations:
+        - inn: "7766558001"
+          kpp: "776655001"
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        - inn: "7766558001"
+          kpp: "776655001"
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+      properties:
+        organizations:
+          description: Список доступных организаций
+          items:
+            $ref: '#/components/schemas/Organization'
+          type: array
+      required:
+      - organizations
+      type: object
+    LongRunningTaskExecutionError:
+      additionalProperties: false
+      properties:
+        traceId:
+          description: Идентификатор ошибки
+          type: string
+        message:
+          description: Текст ошибки
+          type: string
+      required:
+      - message
+      - traceId
+      type: object
+    LongRunningTaskState:
+      additionalProperties: false
+      example:
+        result:
+          updateProductError: ""
+        errorDescription: ""
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        type: ""
+        status: ""
+      properties:
+        id:
+          description: Идентификатор асинхронной операции
+          format: uuid
+          type: string
+        status:
+          allOf:
+          - $ref: '#/components/schemas/LongRunningTaskStatus'
+          description: |-
+            Статус асинхронной операции
+
+            inProcess (Операция в обработке)
+
+            completed (Операция успешно обработана)
+
+            failed (Ошибка при выполнении операции)
+          x-enum-varnames:
+          - InProcess
+          - Completed
+          - Failed
+          x-enum-descriptions:
+          - Операция в обработке
+          - Операция успешно обработана
+          - Ошибка при выполнении операции
+        type:
+          allOf:
+          - $ref: '#/components/schemas/LongRunningTaskType'
+          description: |-
+            Тип операции
+
+            searchContractors (Операция поиска контрагентов)
+
+            searchProducts (Операция поиска товаров)
+
+            createProduct (Операция создания товара)
+
+            updateProduct (Операция обновления товара)
+          x-enum-varnames:
+          - SearchContractors
+          - SearchProducts
+          - CreateProduct
+          - UpdateProduct
+          x-enum-descriptions:
+          - Операция поиска контрагентов
+          - Операция поиска товаров
+          - Операция создания товара
+          - Операция обновления товара
+        result:
+          $ref: '#/components/schemas/LongRunningTaskState_result'
+        errorDescription:
+          allOf:
+          - $ref: '#/components/schemas/LongRunningTaskExecutionError'
+          description: "Информация об ошибке, возникшей во время выполнения операц\
+            ии. Заполнена, если операция завершена с ошибкой."
+          nullable: true
+      required:
+      - id
+      - status
+      - type
+      type: object
+    LongRunningTaskStatus:
+      description: |2-
+
+
+        inProcess (Операция в обработке)
+
+        completed (Операция успешно обработана)
+
+        failed (Ошибка при выполнении операции)
+      enum:
+      - inProcess
+      - completed
+      - failed
+      type: string
+      x-enum-varnames:
+      - InProcess
+      - Completed
+      - Failed
+      x-enum-descriptions:
+      - Операция в обработке
+      - Операция успешно обработана
+      - Ошибка при выполнении операции
+    LongRunningTaskType:
+      description: |2-
+
+
+        searchContractors (Операция поиска контрагентов)
+
+        searchProducts (Операция поиска товаров)
+
+        createProduct (Операция создания товара)
+
+        updateProduct (Операция обновления товара)
+      enum:
+      - searchContractors
+      - searchProducts
+      - createProduct
+      - updateProduct
+      type: string
+      x-enum-varnames:
+      - SearchContractors
+      - SearchProducts
+      - CreateProduct
+      - UpdateProduct
+      x-enum-descriptions:
+      - Операция поиска контрагентов
+      - Операция поиска товаров
+      - Операция создания товара
+      - Операция обновления товара
+    NDSRate:
+      description: |2-
+
+
+        withoutNds (Без НДС)
+
+        nds0 (0%)
+
+        nds5 (5%)
+
+        nds10 (10%)
+
+        nds18 (18%)
+
+        nds20 (20%)
+      enum:
+      - withoutNds
+      - nds0
+      - nds5
+      - nds10
+      - nds18
+      - nds20
+      type: string
+      x-enum-varnames:
+      - WithoutNds
+      - Nds0
+      - Nds5
+      - Nds10
+      - Nds18
+      - Nds20
+      x-enum-descriptions:
+      - Без НДС
+      - 0%
+      - 5%
+      - 10%
+      - 18%
+      - 20%
+    NDSRateToSave:
+      description: |2-
+
+
+        withoutNds (Без НДС)
+
+        nds0 (0%)
+
+        nds5 (5%)
+
+        nds10 (10%)
+
+        nds20 (20%)
+      enum:
+      - withoutNds
+      - nds0
+      - nds5
+      - nds10
+      - nds20
+      type: string
+      x-enum-varnames:
+      - WithoutNds
+      - Nds0
+      - Nds5
+      - Nds10
+      - Nds20
+      x-enum-descriptions:
+      - Без НДС
+      - 0%
+      - 5%
+      - 10%
+      - 20%
+    NewsType:
+      description: |2-
+
+
+        billPaymentNews
+      enum:
+      - billPaymentNews
+      type: string
+      x-enum-varnames:
+      - BillPaymentNews
+      x-enum-descriptions:
+      - ""
+    Organization:
+      additionalProperties: false
+      example:
+        inn: "7766558001"
+        kpp: "776655001"
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+      properties:
+        id:
+          description: Идентификатор организации
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        inn:
+          description: ИНН
+          example: "7766558001"
+          nullable: true
+          type: string
+        kpp:
+          description: КПП
+          example: "776655001"
+          nullable: true
+          type: string
+      required:
+      - id
+      type: object
+    Product:
+      additionalProperties: false
+      example:
+        names:
+        - isMain: true
+          name: Бумага
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        - isMain: true
+          name: Бумага
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        comment: Любой комментарий
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        units:
+        - isMain: true
+          name: шт.
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          ratio: 1
+        - isMain: true
+          name: шт.
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          ratio: 1
+        article: "1233412"
+      properties:
+        id:
+          description: Идентификатор товара
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        names:
+          description: Список названий товара
+          items:
+            $ref: '#/components/schemas/ProductName'
+          type: array
+        units:
+          description: Список единиц измерений товара
+          items:
+            $ref: '#/components/schemas/ProductUnit'
+          type: array
+        article:
+          description: Артикул
+          example: "1233412"
+          nullable: true
+          type: string
+        comment:
+          description: Комментарий
+          example: Любой комментарий
+          nullable: true
+          type: string
+      required:
+      - id
+      - names
+      - units
+      type: object
+    ProductName:
+      additionalProperties: false
+      example:
+        isMain: true
+        name: Бумага
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+      properties:
+        id:
+          description: Идентификатор названия товара
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        name:
+          description: Название товара
+          example: Бумага
+          type: string
+        isMain:
+          description: Название товара является основным
+          example: true
+          type: boolean
+      required:
+      - id
+      - isMain
+      - name
+      type: object
+    ProductNameToCreate:
+      additionalProperties: false
+      example:
+        isMain: true
+        name: Бумага
+      properties:
+        name:
+          description: Название товара
+          example: Бумага
+          maxLength: 400
+          minLength: 1
+          type: string
+        isMain:
+          description: Название товара является основным
+          example: true
+          type: boolean
+      required:
+      - isMain
+      - name
+      type: object
+    ProductNameToUpdate:
+      additionalProperties: false
+      example:
+        isMain: true
+        name: Бумага
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+      properties:
+        id:
+          description: Идентификатор названия товара
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          nullable: true
+          type: string
+        name:
+          description: Название товара
+          example: Бумага
+          maxLength: 400
+          minLength: 1
+          type: string
+        isMain:
+          description: Название товара является основным
+          example: true
+          type: boolean
+      required:
+      - isMain
+      - name
+      type: object
+    ProductType:
+      description: |2-
+
+
+        product (Товар)
+
+        service (Услуга)
+      enum:
+      - product
+      - service
+      type: string
+      x-enum-varnames:
+      - Product
+      - Service
+      x-enum-descriptions:
+      - Товар
+      - Услуга
+    ProductUnit:
+      additionalProperties: false
+      example:
+        isMain: true
+        name: шт.
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        ratio: 1
+      properties:
+        id:
+          description: Идентификатор единицы измерения
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          type: string
+        isMain:
+          description: Единица измерения является основной
+          example: true
+          type: boolean
+        name:
+          description: Название единицы измерения
+          example: шт.
+          type: string
+        ratio:
+          description: Соотношение единицы измерения с основной
+          example: 1
+          format: double
+          nullable: true
+          type: number
+      required:
+      - id
+      - isMain
+      - name
+      type: object
+    ProductUnitToCreate:
+      additionalProperties: false
+      example:
+        isMain: true
+        name: шт.
+        ratio: 1
+      properties:
+        isMain:
+          description: Единица измерения является основной
+          example: true
+          type: boolean
+        name:
+          description: Название единицы измерения
+          example: шт.
+          maxLength: 50
+          minLength: 1
+          type: string
+        ratio:
+          description: Соотношение единицы измерения с основной
+          example: 1
+          format: double
+          maximum: 999999999999999
+          minimum: 1
+          type: number
+      required:
+      - isMain
+      - name
+      - ratio
+      type: object
+    ProductUnitToUpdate:
+      additionalProperties: false
+      example:
+        isMain: true
+        name: шт.
+        id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        ratio: 1
+      properties:
+        id:
+          description: Идентификатор единицы измерения
+          example: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          format: uuid
+          nullable: true
+          type: string
+        isMain:
+          description: Единица измерения является основной
+          example: true
+          type: boolean
+        name:
+          description: Название единицы измерения
+          example: шт.
+          maxLength: 50
+          minLength: 1
+          type: string
+        ratio:
+          description: Соотношение единицы измерения с основной
+          example: 1
+          format: int32
+          type: integer
+      required:
+      - isMain
+      - name
+      - ratio
+      type: object
+    SearchContractorsFilter:
+      additionalProperties: false
+      properties:
+        inn:
+          description: ИНН
+          example: "7766558001"
+          maxLength: 12
+          minLength: 10
+          nullable: true
+          type: string
+        kpp:
+          description: КПП
+          example: "776655001"
+          maxLength: 9
+          minLength: 9
+          nullable: true
+          type: string
+        name:
+          description: Название контрагента
+          example: Ромашка
+          maxLength: 400
+          minLength: 1
+          nullable: true
+          type: string
+      type: object
+    SearchContractorsRequest:
+      additionalProperties: false
+      example:
+        filter: ""
+        offset: 10
+        limit: 50
+      properties:
+        offset:
+          description: "Позиция, начиная с которой будут вычитываться результаты п\
+            оиска контрагентов. По-умолчанию - 0"
+          example: 10
+          format: int32
+          minimum: 0
+          nullable: true
+          type: integer
+        limit:
+          description: "Количество контрагентов, которое необходимо получить при п\
+            оиске. По-умолчанию - 100"
+          example: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          nullable: true
+          type: integer
+        filter:
+          allOf:
+          - $ref: '#/components/schemas/SearchContractorsFilter'
+          description: Фильтр поиска. Хотябы один из параметров фильтра должен быть
+            заполнен
+          nullable: true
+      type: object
+    SearchContractorsTaskResult:
+      additionalProperties: false
+      example:
+        contractors:
+        - address: "г. Скрентон, пр. Слау, 1725, оф. 200"
+          name: name
+          inn: "7766558001"
+          kpp: "776655001"
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          shortName: shortName
+        - address: "г. Скрентон, пр. Слау, 1725, оф. 200"
+          name: name
+          inn: "7766558001"
+          kpp: "776655001"
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          shortName: shortName
+      properties:
+        contractors:
+          description: Список найденных контрагентов
+          items:
+            $ref: '#/components/schemas/FoundContractor'
+          type: array
+      required:
+      - contractors
+      type: object
+    SearchProductsFilter:
+      additionalProperties: false
+      properties:
+        productName:
+          description: Название товара
+          example: Бумага
+          maxLength: 400
+          minLength: 1
+          nullable: true
+          type: string
+        article:
+          description: Артикул
+          example: "1233412"
+          maxLength: 900
+          minLength: 1
+          nullable: true
+          type: string
+      type: object
+    SearchProductsRequest:
+      additionalProperties: false
+      example:
+        filter: ""
+        offset: 10
+        limit: 50
+      properties:
+        offset:
+          description: "Позиция, начиная с которой будут вычитываться результаты п\
+            оиска товаров. По-умолчанию - 0"
+          example: 10
+          format: int32
+          minimum: 0
+          nullable: true
+          type: integer
+        limit:
+          description: "Количество товаров, которое необходимо получить при поиске\
+            . По-умолчанию - 100"
+          example: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          nullable: true
+          type: integer
+        filter:
+          allOf:
+          - $ref: '#/components/schemas/SearchProductsFilter'
+          description: Фильтр поиска. Хотябы один из параметров фильтра должен быть
+            заполнен
+          nullable: true
+      type: object
+    SearchProductsTaskResult:
+      additionalProperties: false
+      example:
+        products:
+        - id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          article: "1233412"
+          productMainName: productMainName
+        - id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          article: "1233412"
+          productMainName: productMainName
+      properties:
+        products:
+          description: Список найденных товаров
+          items:
+            $ref: '#/components/schemas/FoundProduct'
+          type: array
+      required:
+      - products
+      type: object
+    UniversalTransferDocumentItemToCreate:
+      additionalProperties: false
+      example:
+        ndsRate: WithoutNds
+        quantity: 12345679000
+        unitName: шт.
+        rnpt: "11111111111111111111111111111"
+        price: 12345679
+        discount: 12.99
+        originOfProductCountry: Россия
+        productName: Услуга за ноябрь
+        productType: Service
+      properties:
+        productName:
+          description: Наименование товара или услуги
+          example: Услуга за ноябрь
+          maxLength: 400
+          minLength: 1
+          type: string
+        productType:
+          allOf:
+          - $ref: '#/components/schemas/ProductType'
+          description: |-
+            Тип товара
+
+            product (Товар)
+
+            service (Услуга)
+          example: Service
+        unitName:
+          description: Единица измерения
+          example: шт.
+          maxLength: 1000
+          minLength: 1
+          type: string
+        quantity:
+          description: Количество
+          example: 12345679000
+          format: double
+          maximum: 99999999999.9999
+          minimum: 0
+          type: number
+        price:
+          description: Цена за единицу товара
+          example: 12345679
+          format: double
+          maximum: 99999999.9999999
+          minimum: 0
+          nullable: true
+          type: number
+        ndsRate:
+          allOf:
+          - $ref: '#/components/schemas/NDSRateToSave'
+          description: |-
+            НДС
+
+            withoutNds (Без НДС)
+
+            nds0 (0%)
+
+            nds5 (5%)
+
+            nds10 (10%)
+
+            nds20 (20%)
+          example: WithoutNds
+          nullable: true
+        rnpt:
+          description: РНПТ
+          example: "11111111111111111111111111111"
+          maxLength: 29
+          minLength: 13
+          nullable: true
+          type: string
+        originOfProductCountry:
+          description: Страна происхождения товара
+          example: Россия
+          maxLength: 200
+          minLength: 1
+          nullable: true
+          type: string
+        discount:
+          description: Скидка
+          example: 12.99
+          format: double
+          maximum: 100
+          minimum: 0
+          nullable: true
+          type: number
+      required:
+      - productName
+      - productType
+      - quantity
+      - unitName
+      type: object
+    UniversalTransferDocumentStatus:
+      description: |2-
+
+
+        status1 (Со счётом-фактурой, то есть с НДС)
+
+        status2 (Без счёта-фактуры)
+      enum:
+      - status1
+      - status2
+      type: string
+      x-enum-varnames:
+      - Status1
+      - Status2
+      x-enum-descriptions:
+      - "Со счётом-фактурой, то есть с НДС"
+      - Без счёта-фактуры
+    UpdateProductError:
+      description: |2-
+
+
+        productWithSameNameExists (Уже есть товар с таким названием)
+
+        deletingProductNameThatUsedInDocuments (Название товара нельзя удалить, так как оно используется в документах)
+
+        renamingProductNameThatUsedInDocuments (Название товара нельзя изменить, так как оно используется в документах)
+
+        deletingProductUnitThatUsedInDocuments (Единицу измерения нельзя удалить, так как она используется в документах)
+
+        renamingProductUnitThatUsedInDocuments (Единицу измерения нельзя переименовать, так как она используется в документах)
+      enum:
+      - productWithSameNameExists
+      - deletingProductNameThatUsedInDocuments
+      - renamingProductNameThatUsedInDocuments
+      - deletingProductUnitThatUsedInDocuments
+      - renamingProductUnitThatUsedInDocuments
+      type: string
+      x-enum-varnames:
+      - ProductWithSameNameExists
+      - DeletingProductNameThatUsedInDocuments
+      - RenamingProductNameThatUsedInDocuments
+      - DeletingProductUnitThatUsedInDocuments
+      - RenamingProductUnitThatUsedInDocuments
+      x-enum-descriptions:
+      - Уже есть товар с таким названием
+      - "Название товара нельзя удалить, так как оно используется в документах"
+      - "Название товара нельзя изменить, так как оно используется в документах"
+      - "Единицу измерения нельзя удалить, так как она используется в документах"
+      - "Единицу измерения нельзя переименовать, так как она используется в докуме\
+        нтах"
+    UpdateProductRequest:
+      additionalProperties: false
+      example:
+        names:
+        - isMain: true
+          name: Бумага
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        - isMain: true
+          name: Бумага
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+        comment: Любой комментарий
+        units:
+        - isMain: true
+          name: шт.
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          ratio: 1
+        - isMain: true
+          name: шт.
+          id: 9bcc6d6f-23c0-4549-b81c-1299e2d983fe
+          ratio: 1
+        article: "1233412"
+      properties:
+        names:
+          description: Список названий
+          items:
+            $ref: '#/components/schemas/ProductNameToUpdate'
+          minItems: 1
+          type: array
+        units:
+          description: Список единиц измерений
+          items:
+            $ref: '#/components/schemas/ProductUnitToUpdate'
+          minItems: 1
+          type: array
+        article:
+          description: Артикул
+          example: "1233412"
+          maxLength: 900
+          minLength: 1
+          nullable: true
+          type: string
+        comment:
+          description: Комментарий
+          example: Любой комментарий
+          maxLength: 2000
+          minLength: 1
+          nullable: true
+          type: string
+      required:
+      - names
+      - units
+      type: object
+    UpdateProductTaskResult:
+      additionalProperties: false
+      example:
+        updateProductError: ""
+      properties:
+        updateProductError:
+          allOf:
+          - $ref: '#/components/schemas/UpdateProductError'
+          description: |-
+            Ошибка при обновлении товара
+
+            productWithSameNameExists (Уже есть товар с таким названием)
+
+            deletingProductNameThatUsedInDocuments (Название товара нельзя удалить, так как оно используется в документах)
+
+            renamingProductNameThatUsedInDocuments (Название товара нельзя изменить, так как оно используется в документах)
+
+            deletingProductUnitThatUsedInDocuments (Единицу измерения нельзя удалить, так как она используется в документах)
+
+            renamingProductUnitThatUsedInDocuments (Единицу измерения нельзя переименовать, так как она используется в документах)
+          nullable: true
+      type: object
+    DocumentNews_newsContent:
+      description: Содержимое новости
+      oneOf:
+      - $ref: '#/components/schemas/BillPaymentNewsContent'
+    LongRunningTaskState_result:
+      description: "Результат операции. Заполнен, если операция обработана без оши\
+        бок"
+      nullable: true
+      oneOf:
+      - $ref: '#/components/schemas/UpdateProductTaskResult'
+      - $ref: '#/components/schemas/SearchProductsTaskResult'
+      - $ref: '#/components/schemas/CreateProductTaskResult'
+      - $ref: '#/components/schemas/SearchContractorsTaskResult'
+  securitySchemes:
+    ApiKeyAuth:
+      description: Аутентификация по API Key токену
+      in: header
+      name: X-Kontur-ApiKey
+      type: apiKey
